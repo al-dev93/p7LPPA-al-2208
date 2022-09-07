@@ -1,0 +1,84 @@
+
+body{
+    max-width: 1440px;
+    font-family: 'Lato', sans-serif;
+    margin: 0 auto;
+    padding: 2.625rem 6.25rem;
+}
+
+/*NOTE widget sélection tag de filtrage */
+
+.tag-search{
+    width: max-content;
+}
+/* largeur du widget fermé */
+.tag-input-group{
+    min-width: 10.625rem;
+}
+
+.input-dropdown{
+    right: 1.125rem;
+}
+/* largeur du widget ouvert */
+.tag-group{
+    width: 41.688rem;
+}
+
+.tag-group:focus{
+    display: block;
+    z-index: 100;
+}
+/* position de la lite des tag */
+.tag-list{
+    top: -0.625rem;
+}
+
+.tag-list .row{
+    padding: 0.625rem 1.188rem 1.188rem;
+}
+
+/*NOTE gallerie des cartes recettes */
+
+article{
+    margin-top: 5.125rem;
+}
+/* largeur des cartes */
+article .col{
+    max-width: 23.75rem;
+}
+
+/*NOTE design de la carte recette */
+
+/* horloge avant la durée de réalisation */
+.worktime-recipe::before{
+    content: "\f293";
+    font-family: "bootstrap-icons";
+    font-style: normal;
+    font-size: 20px;
+    line-height: 27px;
+    width: 27px;
+    font-weight: bold;
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+}
+/* "min" après la durée de réalisation */
+.worktime-recipe::after{
+    content: "min";
+    padding-left: 3.7px;
+}
+
+/*NOTE typographie carte recette */
+
+/* titre de la recette */
+h2{
+    font-family: 'Lato', sans-serif;
+}
+/* ingrédients et instruction */
+.card-body li, .card-body p{
+    font-size: 12px;
+    line-height: 14px;
+}
+/* instructions */
+.card-body p{
+    font-family: Roboto, sans-serif;
+}
