@@ -1,0 +1,107 @@
+
+body{
+    max-width: 1440px;
+    font-family: 'Lato', sans-serif;
+    margin: 0 auto;
+    padding: 2.625rem 6.25rem;
+}
+
+label{
+    cursor: pointer;
+}
+
+.badge{
+    font-size: 0.875rem;
+    line-height: 1.063rem;
+    padding: 0.625rem 3.438rem 0.653rem 1.25rem;
+    margin-top: 0.563rem;
+    margin-bottom: 0.688rem;
+}
+
+.bi-x-circle{
+    right: 1.375rem;
+    font-size: 1.25rem;
+    cursor: pointer;
+}
+
+/*NOTE widget sélection tag de filtrage */
+
+.tag-search{
+    width: max-content;
+}
+/* largeur du widget fermé */
+.tag-input-group{
+    min-width: 10.625rem;
+}
+.tag-input-group input::placeholder{
+    color: var(--bs-white);
+    opacity: 0.5;
+}
+.input-dropdown{
+    right: 1.125rem;
+}
+/* largeur du widget ouvert */
+.tag-group{
+    width: 41.688rem;
+    z-index: 100;
+}
+/* position lite des tag et gestion du pointeur de souris */
+.tag-list{
+    top: -0.625rem;
+}
+.tag-list .row{
+    padding: 0.625rem 1.188rem 1.188rem;
+    line-height: 1.375rem;
+}
+.tag-list span{
+    cursor: pointer;
+}
+.rotate-caret::before{
+    transform: rotate(180deg);
+}
+
+/*NOTE galerie des cartes recettes */
+
+article{
+    margin-top: 5.125rem;
+}
+/* largeur des cartes */
+#card-gallery .col{
+    max-width: 23.75rem;
+}
+
+/*NOTE design de la carte recette */
+
+/* horloge avant la durée de réalisation */
+.worktime-recipe::before{
+    content: "\f293";
+    font-family: "bootstrap-icons";
+    font-style: normal;
+    font-size: 20px;
+    line-height: 27px;
+    width: 27px;
+    font-weight: bold;
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+}
+/* "min" après la durée de réalisation */
+.worktime-recipe::after{
+    content: "min";
+    padding-left: 3.7px;
+}
+
+/*NOTE typographie carte recette */
+
+/* titre de la recette */
+.card-title{
+    font-family: 'Lato', sans-serif;
+}
+/* ingrédients et instruction */
+.card-body li, .card-body p{
+    font-size: 12px;
+    line-height: 14px;
+}
+/* instructions */
+.card-body p{
+    font-family: Roboto, sans-serif;
+}
