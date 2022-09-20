@@ -46,51 +46,51 @@
             <!-- groupe de filtrage -->
             <div class="row">
                 <!-- filtrage tags ingrédients -->
-                <div class="tag-search d-flex flex-column px-0 me-1" tabindex="-1" aria-expanded='false'>
+                <div class="tag-search d-flex flex-column px-0 me-1" id="ingredient-tag-search" tabindex="-1" aria-expanded='false'>
                     <div class="tag-input-group d-flex w-100">
-                        <input class="w-100 form-control border-ingredient border-end-0 rounded-0 rounded-start text-bg-ingredient text-white fw-bold" id="ingredients-list" size="7" type="text" placeholder="Recherchez un ingrédient" value="Ingrédients">
-                        <label class="ps-0 bi-chevron-down input-group-text bg-ingredient border-ingredient border-start-0 rounded-0 rounded-end text-white fw-bold" for="ingredients-list"></label>
+                        <input class="w-100 form-control border-ingredient border-end-0 rounded-0 rounded-start text-bg-ingredient text-white fw-bold" id="ingredient-list" size="7" type="text" placeholder="Recherchez un ingrédient" value="Ingrédients">
+                        <label class="ps-0 bi-chevron-down input-group-text bg-ingredient border-ingredient border-start-0 rounded-0 rounded-end text-white fw-bold" for="ingredient-list"></label>
                         <!-- <a class="input-dropdown position-absolute top-0 bottom-0 d-flex align-items-center" href="#ingredients-tag-group" role="button" aria-label="Ouvrir la liste des ingrédients">
                             <span class="bi-chevron-down align-middle text-white fw-bold"></span>
                         </a> -->
                     </div>
-                    <div class="tag-group position-relative visually-hidden-focusable" id="ingredients-tag-group" tabindex="-1">
+                    <div class="tag-group position-relative visually-hidden-focusable" id="ingredient-tag-group" tabindex="-1">
                         <div class="tag-list position-absolute start-0 end-0 text-bg-ingredient rounded-bottom text-white">
-                            <div class="row" id="ingredients-tag-list" data-theme="ingredient">
+                            <div class="row" id="ingredient-tag-list" data-theme="ingredient">
                                 <!--COMMENT: insertion la liste des tags  -->
                             </div>
                         </div>
                     </div>
                 </div>
                 <!-- filtrage tags appareils -->
-                <div class="tag-search d-flex flex-column px-0 ms-3 me-1" tabindex="-1" aria-expanded='false'>
+                <div class="tag-search d-flex flex-column px-0 ms-3 me-1" id="device-tag-search" tabindex="-1" aria-expanded='false'>
                     <div class="tag-input-group d-flex w-100">
-                        <input class="w-100 form-control border-device border-end-0 rounded-0 rounded-start text-bg-device text-white fw-bold" id="devices-list" size="7" type="text" placeholder="Recherchez un appareil" value="Appareils">
-                        <label class="ps-0 bi-chevron-down input-group-text bg-device border-device border-start-0 rounded-0 rounded-end text-white fw-bold" for="devices-list"></label>
+                        <input class="w-100 form-control border-device border-end-0 rounded-0 rounded-start text-bg-device text-white fw-bold" id="device-list" size="7" type="text" placeholder="Recherchez un appareil" value="Appareils">
+                        <label class="ps-0 bi-chevron-down input-group-text bg-device border-device border-start-0 rounded-0 rounded-end text-white fw-bold" for="device-list"></label>
                         <!-- <a class="input-dropdown position-absolute top-0 bottom-0 d-flex align-items-center" href="#devices-tag-group" role="button" aria-label="Ouvrir la liste des appareils">
                             <span class="bi-chevron-down align-middle text-white fw-bold"></span>
                         </a> -->
                     </div>
-                    <div class="tag-group position-relative visually-hidden-focusable" id="devices-tag-group" tabindex="-1">
+                    <div class="tag-group position-relative visually-hidden-focusable" id="device-tag-group" tabindex="-1">
                         <div class="tag-list position-absolute start-0 end-0 text-bg-device rounded-bottom text-white">
-                            <div class="row" id="devices-tag-list" data-theme="device">
+                            <div class="row" id="device-tag-list" data-theme="device">
                                 <!--COMMENT: insertion la liste des tags  -->
                             </div>
                         </div>
                     </div>
                 </div>
                 <!-- filtrage tags ustensiles -->
-                <div class="tag-search d-flex flex-column px-0 ms-3 me-1" tabindex="-1" aria-expanded='false'>
+                <div class="tag-search d-flex flex-column px-0 ms-3 me-1" id="utensil-tag-search" tabindex="-1" aria-expanded='false'>
                     <div class="tag-input-group d-flex w-100">
-                        <input class="w-100 form-control border-utensil border-end-0 rounded-0 rounded-start text-bg-utensil text-white fw-bold" id="utensils-list" size="7" type="text" placeholder="Recherchez un ustensile" value="Ustensiles">
-                        <label class="ps-0 bi-chevron-down input-group-text bg-utensil border-utensil border-start-0 rounded-0 rounded-end text-white fw-bold" for="utensils-list"></label>
+                        <input class="w-100 form-control border-utensil border-end-0 rounded-0 rounded-start text-bg-utensil text-white fw-bold" id="utensil-list" size="7" type="text" placeholder="Recherchez un ustensile" value="Ustensiles">
+                        <label class="ps-0 bi-chevron-down input-group-text bg-utensil border-utensil border-start-0 rounded-0 rounded-end text-white fw-bold" for="utensil-list"></label>
                         <!-- <a class="input-dropdown position-absolute top-0 bottom-0 d-flex align-items-center" href="#utensils-tag-group" role="button" aria-label="Ouvrir la liste des ustensiles">
                             <span class="bi-chevron-down align-middle text-white fw-bold"></span>
                         </a> -->
                     </div>
-                    <div class="tag-group position-relative visually-hidden-focusable" id="utensils-tag-group" tabindex="-1">
+                    <div class="tag-group position-relative visually-hidden-focusable" id="utensil-tag-group" tabindex="-1">
                         <div class="tag-list position-absolute start-0 end-0 text-bg-utensil rounded-bottom text-white">
-                            <div class="row" id="utensils-tag-list" data-theme="utensil">
+                            <div class="row" id="utensil-tag-list" data-theme="utensil">
                                 <!--COMMENT: insertion la liste des tags  -->
                             </div>
                         </div>
@@ -101,111 +101,21 @@
         <!-- gallerie des cartes recettes -->
         <article class="container gx-0 gy-5">
             <div class="row row-cols-3 gx-0 gy-5 justify-content-between" id="card-gallery">
-                <div class="col">
-                    <div class="card border-0 bg-search">
-                        <img class="card-img-top bg-image mb-1" height="178px" src="..." alt="">
-                        <div class="card-body">
-                            <div class="d-flex justify-content-between px-1 mb-3">
-                                <h2 class="card-title fw-normal fs-6 lh-base text-dark m-0">
-                                    titre recette
-                                </h2>
-                                <span class="worktime-recipe d-flex align-items-center fw-bold">xx</span>
-                            </div>
-                            <div class="row mx-0 mt-1">
-                                <ul class="col-6 list-group list-group-flush ps-1 pe-0">
-                                    <li class="list-group-item border-0 p-0 fw-semibold bg-search">item 1: <span class="fw-normal">qté</span></li>
-                                    <li class="list-group-item border-0 p-0 fw-semibold bg-search">item 2: <span class="fw-normal">qté</span></li>
-                                    <li class="list-group-item border-0 p-0 fw-semibold bg-search">item 3: <span class="fw-normal">qté</span></li>
-                                </ul>
-                                <p class="col-6 card-text ps-0 pe-1">
-                                    Lorem ipsum dolor, sit amet consectetur adipisicing elit. Veniam at dignissimos repellendus mollitia quisquam rem laudantium modi ratione corrupti. Labore, fugiat libero placeat iure minus architecto quaerat eum molestias aliquid!
-                                </p>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-                <div class="col">
-                    <div class="card border-0 bg-search">
-                        <img class="card-img-top bg-image mb-1" height="178px" src="..." alt="">
-                        <div class="card-body">
-                            <div class="d-flex justify-content-between px-1 mb-3">
-                                <h2 class="card-title fw-normal fs-6 lh-base text-dark m-0">
-                                    titre recette
-                                </h2>
-                                <span class="worktime-recipe d-flex align-items-center fw-bold">xx</span>
-                            </div>
-                            <div class="row mx-0 mt-1">
-                                <ul class="col-6 list-group list-group-flush ps-1 pe-0">
-                                    <li class="list-group-item border-0 p-0 fw-semibold bg-search">item 1: <span class="fw-normal">qté</span></li>
-                                    <li class="list-group-item border-0 p-0 fw-semibold bg-search">item 2: <span class="fw-normal">qté</span></li>
-                                    <li class="list-group-item border-0 p-0 fw-semibold bg-search">item 3: <span class="fw-normal">qté</span></li>
-                                </ul>
-                                <p class="col-6 card-text ps-0 pe-1">
-                                    Lorem ipsum dolor, sit amet consectetur adipisicing elit. Veniam at dignissimos repellendus mollitia quisquam rem laudantium modi ratione corrupti. Labore, fugiat libero placeat iure minus architecto quaerat eum molestias aliquid!
-                                </p>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-                <div class="col">
-                    <div class="card border-0 bg-search">
-                        <img class="card-img-top bg-image mb-1" height="178px" src="..." alt="">
-                        <div class="card-body">
-                            <div class="d-flex justify-content-between px-1 mb-3">
-                                <h2 class="card-title fw-normal fs-6 lh-base text-dark m-0">
-                                    titre recette
-                                </h2>
-                                <span class="worktime-recipe d-flex align-items-center fw-bold">xx</span>
-                            </div>
-                            <div class="row mx-0 mt-1">
-                                <ul class="col-6 list-group list-group-flush ps-1 pe-0">
-                                    <li class="list-group-item border-0 p-0 fw-semibold bg-search">item 1: <span class="fw-normal">qté</span></li>
-                                    <li class="list-group-item border-0 p-0 fw-semibold bg-search">item 2: <span class="fw-normal">qté</span></li>
-                                    <li class="list-group-item border-0 p-0 fw-semibold bg-search">item 3: <span class="fw-normal">qté</span></li>
-                                </ul>
-                                <p class="col-6 card-text ps-0 pe-1">
-                                    Lorem ipsum dolor, sit amet consectetur adipisicing elit. Veniam at dignissimos repellendus mollitia quisquam rem laudantium modi ratione corrupti. Labore, fugiat libero placeat iure minus architecto quaerat eum molestias aliquid!
-                                </p>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-                <div class="col">
-                    <div class="card border-0 bg-search">
-                        <img class="card-img-top bg-image mb-1" height="178px" src="..." alt="">
-                        <div class="card-body">
-                            <div class="d-flex justify-content-between px-1 mb-3">
-                                <h2 class="card-title fw-normal fs-6 lh-base text-dark m-0">
-                                    titre recette
-                                </h2>
-                                <span class="worktime-recipe d-flex align-items-center fw-bold">xx</span>
-                            </div>
-                            <div class="row mx-0 mt-1">
-                                <ul class="col-6 list-group list-group-flush ps-1 pe-0">
-                                    <li class="list-group-item border-0 p-0 fw-semibold bg-search">item 1: <span class="fw-normal">qté</span></li>
-                                    <li class="list-group-item border-0 p-0 fw-semibold bg-search">item 2: <span class="fw-normal">qté</span></li>
-                                    <li class="list-group-item border-0 p-0 fw-semibold bg-search">item 3: <span class="fw-normal">qté</span></li>
-                                </ul>
-                                <p class="col-6 card-text ps-0 pe-1">
-                                    Lorem ipsum dolor, sit amet consectetur adipisicing elit. Veniam at dignissimos repellendus mollitia quisquam rem laudantium modi ratione corrupti. Labore, fugiat libero placeat iure minus architecto quaerat eum molestias aliquid!
-                                </p>
-                            </div>
-                        </div>
-                    </div>
-                </div>
+                <!--COMMENT: insertion des cartes recettes  -->
             </div>
         </article>
 
     </main>
+
     <!--COMMENT template item de la tag-list -->
-    <template id="tpl-search-dropdown-tag-list">
+    <template id="tag-list-template">
         <span class="col-4" tabindex="0">
         </span>
     </template>
     <!-- fin du template -->
 
     <!--COMMENT template tag -->
-    <template id="tpl-insert-tag-bank">
+    <template id="tag-template">
         <span class="badge d-flex align-items-center position-relative me-2 w-auto text-white">
             <span class="bi-x-circle position-absolute" tabindex="0"></span>
         </span>
@@ -213,9 +123,9 @@
     <!-- fin du template -->
 
     <!--COMMENT template de la carte recette -->
-    <template id="tpl-insert-recipe-card-gallery">
-        <div class="col">
-            <div class="card border-0 bg-search">
+    <template id="card-template">
+        <div class="col recipe-card">
+            <div class="card border-0 bg-search h-100">
                 <img class="card-img-top bg-image mb-1" height="178px" src="..." alt="">
                 <div class="card-body">
                     <div class="d-flex justify-content-between px-1 mb-3">
@@ -228,12 +138,12 @@
                     </div>
                     <div class="row mx-0 mt-1">
                         <ul class="col-6 list-group list-group-flush ps-1 pe-0">
-                            <li class="list-group-item border-0 p-0 fw-semibold bg-search">
-                                <!--COMMENT: insertion des ingrédients -->
+                            <!-- <li class="list-group-item border-0 p-0 fw-semibold bg-search">
+                                
                                 <span class="fw-normal">
-                                    <!--COMMENT: insertion de la quantité  -->
+                                    
                                 </span>
-                            </li>
+                            </li> -->
                         </ul>
                         <p class="col-6 card-text ps-0 pe-1">
                             <!--COMMENT: insertion des instructions  -->
@@ -244,9 +154,27 @@
         </div>
     </template>
     <!-- fin du template -->
+    
+    <!--COMMENT template list d'ingrédients carte -->
+    <template id="card-ingredients-template">
+        <li class="list-group-item border-0 p-0 fw-semibold bg-search">
+        <!--COMMENT: insertion des ingrédients -->
+            <span class="fw-normal">
+            <!--COMMENT: insertion de la quantité  -->
+            </span>
+        </li>
+    </template>
+    <!-- fin du template -->
 
-    <script src="data/tests.js"></script>
-    <script src="scripts/pages/index.js"></script>
+    <!-- <script type="module" src="data/recipes.js"></script> -->
+    <script type="module" src="scripts/api/api.js"></script>
+    <script type="module" src="scripts/pages/index.js"></script>
+    <!-- <script src="scripts/utils/data-handle-v1.js"></script> -->
+    <!-- <script src="scripts/utils/naming.js"></script> -->
+    <script type="module" src="scripts/templates/Tag.js"></script>
+    <script type="module" src="scripts/templates/SearchTag.js"></script>
+    <script type="module" src="scripts/templates/RecipeCard.js"></script>
+    <!-- <script src="scripts/tests.js"></script> -->
     <script type="module" src="assets/js/import_bootstrap.js"></script>
 </body>
 </html>

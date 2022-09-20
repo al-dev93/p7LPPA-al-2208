@@ -96,6 +96,7 @@ const tagBank = document.getElementById('tag-bank')
 const suffixDropdownTaglist = "-tag-list";
 
 
+// eslint-disable-next-line no-unused-vars
 function searchDropdownTagList() {
     for (let index = 0; index < DESIGN.theme.length; index++) {
         const theme = DESIGN.theme[index];
@@ -155,6 +156,7 @@ function controlTag(){
     })
 }
 
+// eslint-disable-next-line no-unused-vars
 function controlDropdownTagList(){
     for (const item of tagSearch) {
         const tagList = item.querySelector('.tag-group');
@@ -196,3 +198,53 @@ function escapeDropdownTagList(event, item){
         }
     }
 }
+// test de récupération de données
+//const tagsList = [ingredients, devices, utensils];
+
+// function loadTags(){
+//     for (const index in tagsList) {
+//         extractTagsFromRecipes(index, tagsMap[index]);
+//         // console.log(tagsList[index], tagsMap[index]);
+//     }
+// }
+
+// function extractTagsFromRecipes(list, nodes){
+//     for (const recipe of recipes) {
+//         // console.log(recipe)
+//         if (Array.isArray(recipe[nodes[0]])){
+//             for (const parent of recipe[nodes[0]]){
+//                 if (nodes.length > 1){
+//                     // console.log(parent[nodes[1]], list)
+//                     addTag(parent[nodes[1]], list, recipe.id);
+//                 }
+//                 else {
+//                     // console.log(parent, list)
+//                     addTag(parent, list, recipe.id);
+//                 }
+//             }
+//         }
+//         else {
+//             // console.log(recipe[nodes[0]], list)
+//             addTag(recipe[nodes[0]], list, recipe.id);
+//         }
+//     }
+// }
+
+// function addTag(value, list, id) {
+//     // console.log(value);
+//     if(isDuplicate(value, list)) {
+//         tagsList[list].id.push(id);
+//     } 
+//     else {
+//         tagsList[list].name = value;
+//     }
+// }
+
+// function isDuplicate(value, list) {
+//     for (const element of tagsList[list]) {
+//         if (element.name === value) {
+//             return true;
+//         }
+//     }
+//     return false;
+// }

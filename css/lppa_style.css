@@ -24,7 +24,7 @@ label{
     cursor: pointer;
 }
 
-/*NOTE widget sélection tag de filtrage */
+/*COMMENT widget sélection tag de filtrage */
 
 .tag-search{
     width: max-content;
@@ -60,7 +60,7 @@ label{
     transform: rotate(180deg);
 }
 
-/*NOTE galerie des cartes recettes */
+/*COMMENT galerie des cartes recettes */
 
 article{
     margin-top: 5.125rem;
@@ -70,7 +70,7 @@ article{
     max-width: 23.75rem;
 }
 
-/*NOTE design de la carte recette */
+/*COMMENT design de la carte recette */
 
 /* horloge avant la durée de réalisation */
 .worktime-recipe::before{
@@ -90,7 +90,7 @@ article{
     padding-left: 3.7px;
 }
 
-/*NOTE typographie carte recette */
+/*COMMENT typographie carte recette */
 
 /* titre de la recette */
 .card-title{
