@@ -22,9 +22,12 @@ function loadSearchTag(ingredients, devices, utensils) {
     utensilsTagList.createTagList();
 }
 
-function loadRecipeCard(recipeList) {
-    const recipeCard = new RecipeCard(recipeList);
-    recipeCard.createRecipeCard();
+function loadRecipeCard(recipeList, id = 0, recipeCard = []) {
+    if(id < recipeList.length) {
+        recipeCard[id] = new RecipeCard(id, recipeList[id]);
+        recipeCard[id].createRecipeCard();
+        loadRecipeCard(recipeList, ++id, recipeCard);
+    }
 }
 
 

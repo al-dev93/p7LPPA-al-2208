@@ -50,7 +50,8 @@ class SearchTag {
                 detail:{
                     link: index,
                     theme: this.theme,
-                    name: this.data[index].value
+                    name: this.data[index].value,
+                    recipes: this.data[index].id
                 }});
         tagBank.dispatchEvent(eventInsert);
     }

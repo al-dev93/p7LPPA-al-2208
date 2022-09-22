@@ -4,45 +4,44 @@
 const cardTemplate = document.getElementById('card-template');
 const cardIngredientsTemplate = document.getElementById('card-ingredients-template');
 
-//COMMENT:  cible où insérer la carte recette
-const insertTarget = document.getElementById('card-gallery');
 
 //COMMENT: créée les cartes recttes
 class RecipeCard{
-    constructor(data) {
+    constructor(index, data) {
+        this.index = index;
         this.data = data;
+        this.ingredients = data.ingredients;
+        this.key = data.id;
+        this.parent = document.getElementById('card-gallery');
+        this.card;
     }
 
-    createRecipeCard(index = 0) {
-        if(index < this.data.length) {
-            this.insertTemplate(index);
-            this.card = insertTarget.getElementsByClassName('recipe-card').item(index);
-            const insertIngredient = this.card.querySelector('ul');
-            this.insertIngredients(insertIngredient, index);
-            this.createRecipeCard(++index);
-        }
+    createRecipeCard() {
+        this.insertTemplate();
     }
     // insert le template html de la carte recette
-    insertTemplate(id) {
+    insertTemplate() {
         const clone = document.importNode(cardTemplate.content, true);
         const insert = clone.querySelector('.recipe-card');
-        insert.querySelector('.card-title').textContent = this.data[id].name;
-        insert.querySelector('.worktime-recipe').textContent = this.data[id].time;
-        insert.querySelector('.card-text').textContent = this.data[id].description;
-        insert.setAttribute('data-id', `${id}`);
-        insertTarget.appendChild(clone);
+        insert.querySelector('.card-title').textContent = this.data.name;
+        insert.querySelector('.worktime-recipe').textContent = this.data.time;
+        insert.querySelector('.card-text').textContent = this.data.description;
+        insert.setAttribute('data-id', `${this.key}`);
+        this.parent.appendChild(clone);
+        this.card = this.parent.getElementsByClassName('recipe-card')[this.index];
+        this.insertIngredients(this.card.querySelector('ul'));
     }
     //
-    insertIngredients(target, id, index = 0) {
-        if(index < this.data[id].ingredients.length) {
+    insertIngredients(target, index = 0) {
+        if(index < this.ingredients.length) {
             const clone = document.importNode(cardIngredientsTemplate.content, true);
             const insert = clone.querySelector('li');
-            let quantity = this.data[id].ingredients[index].quantity;
-            quantity = (this.data[id].ingredients[index].unit === undefined)? quantity : quantity+this.data[id].ingredients[index].unit; 
-            insert.insertAdjacentText('afterbegin', this.data[id].ingredients[index].ingredient);
+            let quantity = this.ingredients[index].quantity;
+            quantity = (this.ingredients[index].unit === undefined)? quantity : quantity+this.ingredients[index].unit; 
+            insert.insertAdjacentText('afterbegin', this.ingredients[index].ingredient);
             insert.querySelector('span').textContent = quantity;
             target.appendChild(clone);
-            this.insertIngredients(target, id, ++index);
+            this.insertIngredients(target, ++index);
         }
     }
 }
