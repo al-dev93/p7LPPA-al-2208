@@ -35,17 +35,17 @@ class SearchTag {
     }
     // gestion de l'évènement insérant un tag dans la banque
     addTagControl(tag, index) {
-        tag.addEventListener('click', () => this.eventInsertTag(index));
+        tag.addEventListener('click', () => this.eventAddTag(index));
         tag.addEventListener('keydown', (event) => {
             if(event.key === 'Enter') {
-                this.eventInsertTag(index);
+                this.eventAddTag(index);
             }
         });
     }
     //! //TODO: commenter la méthode
-    eventInsertTag(index) {
+    eventAddTag(index) {
         const eventInsert = new CustomEvent (
-            'insert', {
+            'addtag', {
                 bubbles: true,
                 detail:{
                     link: index,

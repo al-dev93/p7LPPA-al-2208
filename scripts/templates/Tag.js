@@ -7,15 +7,16 @@ const tagBank = document.getElementById('tag-bank')
 
 //COMMENT créée les tags qui sont insérés dans la banque
 class Tag {
-    constructor(link, theme, name){
+    constructor(link, theme, name, recipes){
         this.theme = theme;
         this.name = name;
+        this.recipes = recipes;
         this.background = DESIGN.tbg + this.theme;
         this.link = link;
     }
 
     // insert un tag dans la banque de tags
-    insertTag(){
+    addTag(){
         const clone = document.importNode(tagTemplate.content, true);
         const insert = clone.querySelector('.badge');
         const label = this.name;
@@ -36,6 +37,9 @@ class Tag {
                 lastTag.remove();
             }
         })
+    }
+    get recipeList() {
+        return this.recipes;
     }
 }
 

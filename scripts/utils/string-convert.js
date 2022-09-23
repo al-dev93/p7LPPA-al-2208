@@ -11,4 +11,83 @@ function stringNormalize(string) {
     return (string).normalize('NFD').replace(/[\u0300-\u036f]/g, '').toUpperCase()
 }
 
-export { stringCapitalize, stringNormalize }
+// retourne le symbole de l'unité
+function unitSymbol(unit) {
+    switch (true) {
+        case unit === 'gramme' || unit === 'grammes':
+            return 'g';
+        case unit === 'litre' || unit === 'litres':
+            return 'l';
+    }
+    return unit;
+}
+
+// extrait le premier mot d'une expression
+function extractFirstWord(string){
+    const index = string.indexOf(' ');
+    if(index > -1) {
+        return string.substring(0, index);
+    }
+    return string; 
+}
+
+// retourne le pluriel du mot
+function pluralWord(word) {
+    const str = stringNormalize(word);
+    const twoLastChar = str.substring(str.length-2);
+    const threeLastChar = str.substring(str.length-3);
+    if(twoLastChar === 'AU' || twoLastChar === 'EU' || threeLastChar === 'EAU' || str === 'HIBOU' || str === 'CAILLOU' || str === 'CHOU' ||
+        str === 'BIJOU' || str === 'GENOU' || str === 'JOUJOU' || str === 'POU') {
+        if(str !== 'PNEU' && str !== 'LANDAU' && str !== 'BLEU') {
+            return word+'x';
+        }
+    }
+    if(twoLastChar === 'AL' ) {
+        if(str !== 'BAL' && str !== 'CARNAVAL' && str !== 'FESTIVAL' && str !== 'CHACAL' && str !== 'RECITAL' && str !== 'FATAL' &&
+            str !== 'BANAL' && str !== 'NATAL' && str !== 'NAVAL' && str !== 'REGAL' && str !== 'CAL' && str !== 'SERVAL' &&
+            str !== 'ETAL') {
+            return word.substring(0, word.length-2)+'aux';
+        }
+    }
+    if(threeLastChar === 'AIL') {
+        if(str === 'BAIL' || str === 'CORAIL' || str === 'EMAIL' || str === 'SOUPIRAIL' || str === 'TRAVAIL' || str === 'VENTAIL' || 
+            str === 'VITRAIL') {
+            return word.substring(0, word.length-3)+'aux';
+        }
+    }
+    return word+'s';
+}
+
+// retourne le singulier du mot 
+function singularWord(word) {
+    const str = stringNormalize(word);
+    //const twoLastChar = str.substring(str.length-2);
+    const threeLastChar = str.substring(str.length-3);
+    if(threeLastChar === 'AUX'&& (str === 'BAUX' || str === 'CORAUX' || str === 'EMAUX' || str === 'SOUPIRAUX' || str === 'TRAVAUX' || 
+        str === 'VENTAUX' || str === 'VITRAUX')) {
+        return word.substring(0, word.length-2)+'il'
+    }
+    return word.substring(0, word.length-1);
+}
+
+// applique le pluriel ou le singulier en fonction de la quantité
+function agreementConvert(quantity, string) {
+    const word = extractFirstWord(string);
+    const str = stringNormalize(word);
+    const lastChar = str[str.length-1];
+    console.log(lastChar)
+    if(quantity > 1 && (lastChar === 'S' || lastChar === 'X')) {
+        return word;
+    } else if(quantity > 1) {
+        return pluralWord(word);
+    }
+    if(quantity <= 1 && (lastChar === 'S' || lastChar === 'X')) {
+        return singularWord(word)
+    } else if(quantity <=1) {
+        return word;
+    }
+}
+
+
+
+export { stringCapitalize, stringNormalize, unitSymbol, agreementConvert }

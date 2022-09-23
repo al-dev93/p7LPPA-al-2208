@@ -13,11 +13,13 @@ class RecipeCard{
         this.ingredients = data.ingredients;
         this.key = data.id;
         this.parent = document.getElementById('card-gallery');
+        this.enabled = true;
         this.card;
     }
 
     createRecipeCard() {
         this.insertTemplate();
+        this.enabledControl();
     }
     // insert le template html de la carte recette
     insertTemplate() {
@@ -43,6 +45,26 @@ class RecipeCard{
             target.appendChild(clone);
             this.insertIngredients(target, ++index);
         }
+    }
+
+    enabledControl() {
+        this.card.addEventListener('enabled', (event) => {
+            const selected = this.isSelected(event.detail, this.key);
+            if(selected && !this.enabled) {
+                this.enabled = true;
+                this.card.classList.toggle('d-none')
+            } else if(!selected && this.enabled) {
+                this.enabled = false;
+                this.card.classList.toggle('d-none');
+            }
+        });
+    }
+
+    isSelected(recipeList, key, id = 0) {
+        while(id < recipeList.length && recipeList[id] !== key) {
+            id++;
+        }
+        return(recipeList[id] === key)
     }
 }
 
