@@ -1,14 +1,15 @@
 import { DESIGN } from "../../scripts/utils/naming.js";
-import { tagBank } from "../../scripts/templates/Tag.js";
+import { Tag } from "../../scripts/templates/Tag.js";
 
 //COMMENT:  cible le template html des items de la liste déroulante de tags
 const tagListTemplate = document.getElementById('tag-list-template');
 
 //COMMENT: créée les listes déroulantes de tags 
 class SearchTag {
-    constructor(theme, data) {
+    constructor(theme, data, bank) {
         this.theme = theme;
         this.data = data;
+        this.bank = bank;
         this.target = document.getElementById(this.theme + '-tag-list');
         this.tagSearch = document.getElementById(this.theme + '-tag-search');
         this.tagGroup = document.getElementById(this.theme + '-tag-group');
@@ -19,8 +20,8 @@ class SearchTag {
     createTagList(index = 0) {
         if(index < this.data.length) {
             this.insertTemplate(index, this.data[index].value);
-            this.tags = this.target.querySelectorAll('span');
-            this.addTagControl(this.tags[index], index);
+            const tags = this.target.querySelectorAll('span');
+            this.addTagControl(tags[index], index);
             this.createTagList(++index);
         }
         this.controlsWidget();
@@ -35,26 +36,21 @@ class SearchTag {
     }
     // gestion de l'évènement insérant un tag dans la banque
     addTagControl(tag, index) {
-        tag.addEventListener('click', () => this.eventAddTag(index));
+        tag.addEventListener('click', () => this.addTag(index));
         tag.addEventListener('keydown', (event) => {
             if(event.key === 'Enter') {
-                this.eventAddTag(index);
+                this.addTag(index);
             }
         });
     }
-    //! //TODO: commenter la méthode
-    eventAddTag(index) {
-        const eventInsert = new CustomEvent (
-            'addtag', {
-                bubbles: true,
-                detail:{
-                    link: index,
-                    theme: this.theme,
-                    name: this.data[index].value,
-                    recipes: this.data[index].id
-                }});
-        tagBank.dispatchEvent(eventInsert);
+
+    addTag(index) {
+        const idTag = this.theme+index;
+        const recipes = JSON.parse(JSON.stringify(this.data[index].id));
+        const newTag = new Tag(idTag, this.theme, this.data[index].value, recipes, this.bank);
+        newTag.createTag();
     }
+
     // gestion des évènement pour l'ouverture et la fermeture de la liste déroulante 
     controlsWidget() {
         const tagInput = this.tagSearch.querySelector('input');
@@ -70,8 +66,8 @@ class SearchTag {
     // ouvre la liste déroulante
     openWidget(tag, list, input, label) {
         list.classList.remove('visually-hidden-focusable');
+        label.classList.add('rotate-caret');
         input.value = "";
-        label.classList.toggle('rotate-caret');
         tag.setAttribute('aria-expanded', 'true');
     }
 
@@ -93,8 +89,8 @@ class SearchTag {
     // ferme la liste déroulante
     closeWidget(tag, list, input, label) {
         list.classList.add('visually-hidden-focusable');
+        label.classList.remove('rotate-caret');
         input.value = input.defaultValue;
-        label.classList.toggle('rotate-caret');
         tag.setAttribute('aria-expanded', 'false');
     }
 

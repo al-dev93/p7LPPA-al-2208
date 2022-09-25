@@ -36,24 +36,11 @@ function pluralWord(word) {
     const str = stringNormalize(word);
     const twoLastChar = str.substring(str.length-2);
     const threeLastChar = str.substring(str.length-3);
-    if(twoLastChar === 'AU' || twoLastChar === 'EU' || threeLastChar === 'EAU' || str === 'HIBOU' || str === 'CAILLOU' || str === 'CHOU' ||
-        str === 'BIJOU' || str === 'GENOU' || str === 'JOUJOU' || str === 'POU') {
-        if(str !== 'PNEU' && str !== 'LANDAU' && str !== 'BLEU') {
-            return word+'x';
-        }
+    if(twoLastChar === 'AU' || (twoLastChar === 'EU' && str !== 'BLEU') || threeLastChar === 'EAU' || str === 'CHOU') {
+        return word+'x';
     }
     if(twoLastChar === 'AL' ) {
-        if(str !== 'BAL' && str !== 'CARNAVAL' && str !== 'FESTIVAL' && str !== 'CHACAL' && str !== 'RECITAL' && str !== 'FATAL' &&
-            str !== 'BANAL' && str !== 'NATAL' && str !== 'NAVAL' && str !== 'REGAL' && str !== 'CAL' && str !== 'SERVAL' &&
-            str !== 'ETAL') {
             return word.substring(0, word.length-2)+'aux';
-        }
-    }
-    if(threeLastChar === 'AIL') {
-        if(str === 'BAIL' || str === 'CORAIL' || str === 'EMAIL' || str === 'SOUPIRAIL' || str === 'TRAVAIL' || str === 'VENTAIL' || 
-            str === 'VITRAIL') {
-            return word.substring(0, word.length-3)+'aux';
-        }
     }
     return word+'s';
 }

@@ -13,6 +13,3 @@
 //                       utensil: utensils,
 //                       recipe: recipesCard
 //                     };
-const allRecipes = [];
-
-export { allRecipes }

@@ -1,5 +1,4 @@
 import { recipes } from "../../data/recipes.js";
-import { allRecipes } from "../store/data.js";
 import { getNode } from "../../scripts/utils/data-handler-v1.js";
 import { stringCapitalize, stringNormalize, unitSymbol, agreementConvert } from "../../scripts/utils/string-convert.js";
 
@@ -45,8 +44,7 @@ function pushRecipe(list, value, key, idPath, path, idValue, headRecipes, record
                     time: path[idPath-1][idValue].time, 
                     description: path[idPath-1][idValue].description,
                     ingredients: []
-                };
-        allRecipes[allRecipes.length] = key;
+                }
     }
     if(idPath == 2 && headRecipes !== undefined) {
         list[list.length] = key;
