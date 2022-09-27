@@ -1,6 +1,6 @@
 import { recipes } from "../../data/recipes.js";
-import { getNode } from "../../scripts/utils/data-handle-v1.js";
-import { stringCapitalize, stringNormalize } from "../../scripts/utils/string-convert.js";
+import { getNode } from "../../scripts/utils/data-handler-v1.js";
+import { stringCapitalize, stringNormalize, unitSymbol, agreementConvert } from "../../scripts/utils/string-convert.js";
 
 const pathToIngredients = [recipes, 'ingredients', 'ingredient'];
 const pathToDevices = [recipes, 'appliance'];
@@ -44,11 +44,18 @@ function pushRecipe(list, value, key, idPath, path, idValue, headRecipes, record
                     time: path[idPath-1][idValue].time, 
                     description: path[idPath-1][idValue].description,
                     ingredients: []
-                };
+                }
     }
     if(idPath == 2 && headRecipes !== undefined) {
         list[list.length] = key;
         headRecipes[record].ingredients[idValue] = path[idPath-2][record].ingredients[idValue];
+        const thisRecord = headRecipes[record].ingredients[idValue];
+        if(thisRecord.unit !== undefined) {
+            thisRecord.unit = unitSymbol(thisRecord.unit);
+            if(thisRecord.quantity !== undefined && thisRecord.unit.length > 2) {
+                thisRecord.unit = agreementConvert(thisRecord.quantity, thisRecord.unit);
+            }
+        }
     }
 }
 

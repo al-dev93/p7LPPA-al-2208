@@ -7,15 +7,9 @@
 // const recipesCard = [];
 
 //!
-const widgetData =  {
-                      ingredient: ingredients,
-                      device: devices,
-                      utensil: utensils,
-                      recipe: recipesCard
-                    };
-
-
-
-
-
-//export {ingredients, devices, utensils, widgetData}
+// const widgetData =  {
+//                       ingredient: ingredients,
+//                       device: devices,
+//                       utensil: utensils,
+//                       recipe: recipesCard
+//                     };
