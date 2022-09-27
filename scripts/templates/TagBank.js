@@ -9,7 +9,7 @@ class TagBank {
         this.tagsInBank = {};
         this.mergeBank = [];
         this.stock = 0;
-        this.cards = cardGallery.getElementsByClassName('recipe-card')
+        this.cards = cardGallery.getElementsByClassName('recipe-card');
     }
 
     enableEvent() {
@@ -21,10 +21,10 @@ class TagBank {
         return enableEvent;
     }
 
-    sendBank(cards, id = 0) {
-        if(id < cards.length) {
-            cards[id].dispatchEvent(this.enableEvent());
-            this.sendBank(cards, ++id);
+    sendBank(id = 0) {
+        if(id < this.cards.length) {
+            this.cards[id].dispatchEvent(this.enableEvent());
+            this.sendBank(++id);
         }
     }
 
@@ -32,18 +32,14 @@ class TagBank {
         if(this.stock) {
             let id = 0;
             for (const tag in this.tagsInBank) {
-                if (!id) {
-                    this.mergeBank = this.tagsInBank[tag];
-                } else {
-                    const merge = mergeArray(this.mergeBank, this.tagsInBank[tag]);
-                    this.mergeBank = merge;
-                }
+                const merge = (!id)?  this.tagsInBank[tag] : mergeArray(this.mergeBank, this.tagsInBank[tag]);
+                this.mergeBank = merge;
                 ++id;
             }
         } else {
             this.mergeBank.length = 0;
         }
-        this.sendBank(this.cards);
+        this.sendBank();
     }
     
     pushInBank(tag) {
@@ -60,6 +56,14 @@ class TagBank {
             --this.stock;
             this.mergeTagsInBank();
         }
+    }
+    
+    get listOfTags() {
+        return this.tagsInBank;
+    }
+
+    get countTags() {
+        return this.stock;
     }
 }
 

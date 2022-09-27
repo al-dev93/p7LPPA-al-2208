@@ -45,6 +45,41 @@ function pluralWord(word) {
     return word+'s';
 }
 
+//!//TODO commenter la fonction
+function searchFirstChar(str, char) {
+    const firstChar = [];
+    for(const i in str) {
+        if(str[i] === char) {
+            firstChar[firstChar.length] = +i;
+        }
+    }
+    return (firstChar.length > 0)? firstChar: false;
+}
+
+//!//TODO commenter la fonction
+function searchSubstring(str, start, end) {
+    let i = start;
+    let result = "";
+    while (i <= end) {
+        result += str[i];
+        ++i;
+    }
+    return result;
+}
+
+//!//TODO commenter la fonction
+function searchString(str1, str2) {
+    const charPos = searchFirstChar(str1, str2[0]);
+    let charResult;     
+    for(const i in charPos) {
+        const str = searchSubstring(str1, charPos[i], charPos[i]+str2.length-1)
+        if(str === str2) {
+            charResult = str;
+        }
+    }
+    return (str2 === charResult)
+} 
+
 // retourne le singulier du mot 
 function singularWord(word) {
     const str = stringNormalize(word);
@@ -77,4 +112,4 @@ function agreementConvert(quantity, string) {
 
 
 
-export { stringCapitalize, stringNormalize, unitSymbol, agreementConvert }
+export { stringCapitalize, stringNormalize, searchString, unitSymbol, agreementConvert }
