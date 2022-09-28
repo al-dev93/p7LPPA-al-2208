@@ -65,6 +65,10 @@ class TagBank {
     get countTags() {
         return this.stock;
     }
+
+    get enabledRecipes() {
+        return this.mergeBank;
+    }
 }
 
 export { TagBank, tagBank }

@@ -1,3 +1,4 @@
+import { searchString, stringNormalize } from "../utils/string-convert.js";
 
 
 //COMMENT:  cible le template html des items de la liste déroulante de tags
@@ -14,12 +15,15 @@ class RecipeCard{
         this.ingredients = data.ingredients;
         this.key = data.id;
         this.enableWithTag = true;
+        this.enableWithSearch = true;
         this.card;
+        this.searchInput = document.getElementById('recipes-search');
     }
 
     createRecipeCard() {
         this.insertTemplate();
         this.enabledControl();
+        this.searchControl();
     }
     // insert le template html de la carte recette
     insertTemplate() {
@@ -49,18 +53,37 @@ class RecipeCard{
 
     enabledControl() {
         this.card.addEventListener('enable-tag', (event) => {
-            if(event.detail.length === 0) {
+            if(event.detail.length === 0 && this.enableWithSearch) {
                 this.enableWithTag = true;
                 this.card.classList.remove('d-none');
                 return;
             }
             const selected = this.isSelected(event.detail, this.key);
-            if(selected && !this.enableWithTag) {
+            if(selected && !this.enableWithTag && this.enableWithSearch) {
                 this.enableWithTag = true;
-                this.card.classList.toggle('d-none')
-            } else if(!selected && this.enableWithTag) {
+                this.card.classList.remove('d-none')
+            } else if(!selected && this.enableWithTag && this.enableWithSearch) {
                 this.enableWithTag = false;
-                this.card.classList.toggle('d-none');
+                this.card.classList.add('d-none');
+            }
+        });
+    }
+
+    searchControl() {
+        this.card.addEventListener('search-recipe', () => {
+            const searchInput = stringNormalize(`${this.searchInput.value}`);
+            const name = searchString(this.data.normalizeName, searchInput);
+            console.log(name, this.data.normalizeName, searchInput)
+            //const description = searchString(this.data.normalizeDescription, searchInput);
+            if(!name && this.enableWithTag && searchInput !== "") {
+                this.card.classList.add('d-none');
+                this.enableWithSearch = false;
+            } else if(name && this.enableWithTag && searchInput !== "") {
+                this.card.classList.remove('d-none');
+                this.enableWithSearch = true;
+            } else if(searchInput === "" && this.enableWithTag) {
+                this.card.classList.remove('d-none');
+                this.enableWithSearch = true;
             }
         });
     }

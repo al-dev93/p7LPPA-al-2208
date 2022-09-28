@@ -41,8 +41,10 @@ function pushRecipe(list, value, key, idPath, path, idValue, headRecipes, record
         list[list.length] = {
                     id: key, 
                     name: value,
+                    normalizeName: stringNormalize(value),
                     time: path[idPath-1][idValue].time, 
                     description: path[idPath-1][idValue].description,
+                    normalizeDescription: stringNormalize(path[idPath-1][idValue].description),
                     ingredients: []
                 }
     }
