@@ -1,9 +1,12 @@
 import { DESIGN } from "../../scripts/utils/naming.js";
 import { Tag } from "../../scripts/templates/Tag.js";
+import { eventAtAll, templateClone } from "../utils/template.js";
+import { junctionArray } from "../utils/array-handler-v1.js";
 import { searchString, stringNormalize } from "../utils/string-convert.js";
 
 //COMMENT:  cible le template html des items de la liste déroulante de tags
 const tagListTemplate = document.getElementById('tag-list-template');
+
 
 //COMMENT: créée les listes déroulantes de tags 
 class SearchTag {
@@ -16,8 +19,13 @@ class SearchTag {
         this.tagGroup = document.getElementById(this.theme + '-tag-group');
         this.tagInput = document.getElementById(this.theme + '-list');
         this.tags;
+        this.enableRecipes = [];
         this.background = DESIGN.bg + this.theme;
-        this.SearchEvent = new Event('search-tag');
+        this.eventSearch = new Event('search-tag');
+    }
+
+    createSearchTag() {
+        this.createTagList();
     }
 
     // créé la liste déroulante de tags
@@ -33,10 +41,9 @@ class SearchTag {
 
     // insert le template html des tags de la liste déroulante
     insertTemplate(id, value) {
-        const clone = document.importNode(tagListTemplate.content, true);
-        const insert = clone.querySelector('span');
-        insert.insertAdjacentText('beforeend', value);
-        insert.setAttribute('data-id', `${id}`);
+        const [{clone}, {custom} ] = templateClone(tagListTemplate, 'span');
+        custom.insertAdjacentText('beforeend', value);
+        custom.setAttribute('data-id', `${id}`);
         this.target.appendChild(clone);
     }
 
@@ -49,17 +56,9 @@ class SearchTag {
             }
         });
         tag.addEventListener('search-tag', () => this.searchInput(index));
+        tag.addEventListener('select-tag', () => this.enabledTagBySearch(tag, index))
     }
-
-    addTag(index) {
-        const idTag = this.theme+index;
-        if (!(idTag in this.bank.listOfTags)) {
-            const recipes = JSON.parse(JSON.stringify(this.data[index].id));
-            const newTag = new Tag(idTag, this.theme, this.data[index].value, recipes, this.bank);
-            newTag.createTag();
-        }
-    }
-
+    //FIXME problème de recherche dans le bon tableau si affiche suite à recherche générale ou pas
     //!//TODO commenter la méthode
     searchInput(index) {
         const search = searchString(this.data[index].normalize, stringNormalize(`${this.tagInput.value}`)) || this.tagInput.value === "";
@@ -70,11 +69,35 @@ class SearchTag {
         }
     }
 
+    enabledTagBySearch(tag, index) {
+        if(this.bank.enableKeysRecipes.length) { //FIXME remplacer par enableIdRecipes
+            //  et keysRecipeInTag par idRecipesInTag
+            const keysRecipeInTag = junctionArray(this.data[index].id, this.bank.enableKeysRecipes); //FIXME remplacer id par idRecipes et enableIdRecipes
+            (keysRecipeInTag.length == 0)? tag.classList.add('d-none') : tag.classList.remove('d-none');
+        } else {
+            tag.classList.remove('d-none');
+        }
+    }
+    
+    addTag(index) {
+        const idTag = this.theme+index;
+        if (!(idTag in this.bank.listOfTags)) {
+            const recipes = JSON.parse(JSON.stringify(this.data[index].id)); //FIXME remplacer id par idRecipes
+            const newTag = new Tag(idTag, this.theme, this.data[index].value, recipes, this.bank);
+            newTag.createTag();
+        }
+    }
+
     // gestion des évènement pour l'ouverture et la fermeture de la liste déroulante 
+    //FIXME quand cherche dans searchtag, l'affichage de la liste des taches reste verrouillée sur résultat recherche
     controlsWidget() {
         const labelInput = this.tagSearch.querySelector('label');
-        this.tagInput.addEventListener('focusin', () => this.enableAllTags());
-        this.tagInput.addEventListener('input', () => this.sendSearchTag());
+        this.tagInput.addEventListener('focusin', () => {
+            if(this.tagInput.value === "") {
+                this.enableAllTags();
+            }
+        });
+        this.tagInput.addEventListener('input', () => eventAtAll(this.tags, this.eventSearch));
         this.tagSearch.addEventListener('focusin', () => this.openWidget(labelInput));
         this.tagSearch.addEventListener('focusout', () => this.closeWidget(labelInput));
         this.tagSearch.addEventListener('keydown', (event) => this.escapeWidget(event));
@@ -82,13 +105,6 @@ class SearchTag {
         this.tagGroup.addEventListener('keydown', (event) => this.escapeWidget(event));
         labelInput.addEventListener('click', (event) => this.escapeWidget(event));
     }    
-
-    sendSearchTag(id = 0) {
-        if(id < this.tags.length) {
-            this.tags[id].dispatchEvent(this.SearchEvent);
-            this.sendSearchTag(++id);
-        }
-    }
 
     enableAllTags(id = 0) {
         if( id < this.tags.length) {

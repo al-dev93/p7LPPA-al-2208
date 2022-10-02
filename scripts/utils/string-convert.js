@@ -97,7 +97,6 @@ function agreementConvert(quantity, string) {
     const word = extractFirstWord(string);
     const str = stringNormalize(word);
     const lastChar = str[str.length-1];
-    console.log(lastChar)
     if(quantity > 1 && (lastChar === 'S' || lastChar === 'X')) {
         return word;
     } else if(quantity > 1) {
