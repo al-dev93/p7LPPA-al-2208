@@ -1,5 +1,6 @@
 import { DESIGN } from "../../scripts/utils/naming.js";
 import { tagBank} from "../../scripts/templates/TagBank.js";
+import { templateClone } from "../utils/template.js";
 
 //COMMENT  cible le template html des tags insérés en banque
 const tagTemplate = document.getElementById('tag-template');
@@ -13,24 +14,23 @@ class Tag {
         this.recipes = recipes;
         this.bank = bank;
         this.background = DESIGN.tbg + this.theme;
+        this.tags = tagBank.getElementsByClassName('badge');
         this.tag;
     }
 
     // insert un tag dans la banque de tags
     createTag(){
         this.insertTemplate();
-        const index = tagBank.getElementsByClassName('badge').length - 1;
-        this.tag = tagBank.getElementsByClassName('badge')[index];
+        this.tag = this.tags[this.tags.length-1];
         this.controlTag();
         this.bank.pushInBank(this);
     }
 
     insertTemplate() {
-        const clone = document.importNode(tagTemplate.content, true);
-        const insert = clone.querySelector('.badge');
+        const [{clone}, {custom}] = templateClone(tagTemplate, '.badge');
         const label = this.name;
-        insert.classList.add(this.background);
-        insert.insertAdjacentText('afterbegin', label);
+        custom.classList.add(this.background);
+        custom.insertAdjacentText('afterbegin', label);
         tagBank.appendChild(clone);
     }
 

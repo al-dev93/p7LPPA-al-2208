@@ -16,10 +16,10 @@ const pathToData = [
 
 
 //! //TODO commenter la fonction
-function pushTagListItem(list, value, key) {
+function pushTagListItem(list, value, key, record) {
     const strNormalize = stringNormalize(value);
     if(!list.length) {
-        list[0] = {id: [key], value: stringCapitalize(value), normalize: strNormalize};
+        list[0] = {id: [key], idRecipes: [record], value: stringCapitalize(value), normalize: strNormalize};
         return;
     }
     let id = 0, isDuplicate = false;
@@ -27,16 +27,17 @@ function pushTagListItem(list, value, key) {
         if(strNormalize === list[id].normalize) {
         isDuplicate = true;
         list[id].id[list[id].id.length] = key;
+        list[id].idRecipes[list[id].idRecipes.length] = record;
         }
         id++;
     }
     if(!isDuplicate) {
-        list[list.length] = {id: [key], value: stringCapitalize(value), normalize: strNormalize};
+        list[list.length] = {id: [key], idRecipes: [record], value: stringCapitalize(value), normalize: strNormalize};
     }
 }
 
 //! //TODO commenter la fonction
-function pushRecipe(list, value, key, idPath, path, idValue, headRecipes, record) { 
+function pushRecipe(list, value, key, record, idPath, path, idValue, headRecipes) { 
     if(idPath == 1) {
         list[list.length] = {
                     id: key, 
@@ -45,13 +46,17 @@ function pushRecipe(list, value, key, idPath, path, idValue, headRecipes, record
                     time: path[idPath-1][idValue].time, 
                     description: path[idPath-1][idValue].description,
                     normalizeDescription: stringNormalize(path[idPath-1][idValue].description),
-                    ingredients: []
+                    ingredients: [],
+                    listIngredients: ""
                 }
     }
     if(idPath == 2 && headRecipes !== undefined) {
+
         list[list.length] = key;
         headRecipes[record].ingredients[idValue] = path[idPath-2][record].ingredients[idValue];
         const thisRecord = headRecipes[record].ingredients[idValue];
+        const thisIngredient = stringNormalize(thisRecord.ingredient); 
+        headRecipes[record].listIngredients += (!headRecipes[record].listIngredients.length)? thisIngredient : " "+thisIngredient;
         if(thisRecord.unit !== undefined) {
             thisRecord.unit = unitSymbol(thisRecord.unit);
             if(thisRecord.quantity !== undefined && thisRecord.unit.length > 2) {

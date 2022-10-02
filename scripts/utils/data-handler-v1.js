@@ -11,7 +11,7 @@ function getNode(path, getValue, recipes, currentPath, idNode, key, record, stac
     const node = (!idPath && idNode === undefined)? path[idPath] : currentPath;
     switch (true) {
         case isValue(node):
-            getValue(stack, node, key, idPath, path, idNode, recipes, record);
+            getValue(stack, node, key, record, idPath, path, idNode, recipes);
             break;
         case isValueList(node):
             foreachValue(stack, node, key, getValue, idPath, path, recipes, record);
@@ -38,7 +38,7 @@ function getNode(path, getValue, recipes, currentPath, idNode, key, record, stac
 // Appelle getValue pour chaque valeur
 function foreachValue(stack, list, key, getValue, property, path, recipes, record, idValue = 0) {
     if (idValue < list.length) {
-        getValue(stack, list[idValue], key, property, path, idValue, recipes, record);
+        getValue(stack, list[idValue], key, record, property, path, idValue, recipes);
         foreachValue(stack, list, key, getValue, property, path, recipes, record, ++idValue);
     }
 }
