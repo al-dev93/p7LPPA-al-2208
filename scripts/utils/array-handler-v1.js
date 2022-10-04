@@ -3,27 +3,108 @@
 function mergeArray(arr1, arr2, id1=0, id2=0, arr=[]) {
     if(id1 < arr1.length && id2 < arr2.length && arr1[id1] == arr2[id2]) {
         arr[arr.length] = arr1[id1];
-        mergeArray(arr1, arr2, ++id1, ++id2, arr)
+        mergeArray(arr1, arr2, ++id1, ++id2, arr);
     } else if(id1 < arr1.length && (id2 == arr2.length || arr1[id1] < arr2[id2])) {
         arr[arr.length] = arr1[id1];
-        mergeArray(arr1, arr2, ++id1, id2, arr)
+        mergeArray(arr1, arr2, ++id1, id2, arr);
     } else if(id2 < arr2.length && (id1 == arr1.length || arr2[id2] < arr1[id1])) {
         arr[arr.length] = arr2[id2];
-        mergeArray(arr1, arr2, id1, ++id2, arr)
+        mergeArray(arr1, arr2, id1, ++id2, arr);
     }
     return arr;
 }
 
 //! //TODO commenter la méthode
+function mergeListOfArray(arrays) {
+    let id = 0, merge = [];
+    for(const arr of arrays) {
+        merge = (!id)? arr[1] : mergeArray(merge, arr[1]);
+        ++id;
+    }
+    return merge;
+}
+
+//! //TODO commenter la méthode
+function inActiveTags(arr, id) {
+    for(const item in arr) {
+        if(arr[item][0] === id) {
+            return true;
+        }
+    }
+    return false;
+}
+
+//! //TODO commenter la méthode
+function getItemInActiveTags(arr, id) {
+    for(const item in arr) {
+        if(arr[item][0] === id) {
+            return arr[item];
+        }
+    }
+    return false;
+}
+
+//! //TODO commenter la méthode
+function removeInActiveTags(arr, id, removed = []) {
+    for(const item in arr) {
+        if(arr[item][0] !== id) {
+            removed[removed.length] = arr[item];
+        }
+    }
+    return removed;
+}
+
+// function isEqualItem(arr, thisArr, id = 0) {
+//     while(id < thisArr.length) {
+//         if(arr[id] === thisArr[id]) {
+//             ++id;
+//         } else break;
+//     }
+//     return (id === thisArr.length)
+// }
+// function removeInListOfArray(arrays, pullarr, remove = []) {
+//     for(const arr of arrays) {
+//         if(arr.length !== pullarr.length || !isEqualItem(arr, pullarr)) {
+//             remove[remove.length] = arr;
+//         }
+//     }
+//     return remove;
+// }
+// function inListOfArray(arrays, thisArr) {
+//     for(const arr of arrays) {
+//         if(arr.length === thisArr.length && isEqualItem(arr, thisArr)) {
+//             return true;
+//         }
+//     }
+//     return false;
+// }
+// function idInListOfArray(arrays, id) {
+//     for(const item in arrays) {
+//         if(+item === id) {
+//             return true;
+//         }
+//     }
+//     return false;
+// }
+// function removeIdInListOfArray(arrays, id, removed = []) {
+//     for(const item in arrays) {
+//         if(+item !== id) {
+//             removed[removed.length] = arrays[item];
+//         }
+//     }
+//     return removed;
+// }
+                        
+//! //TODO commenter la méthode
 function junctionArray(arr1, arr2, id1=0, id2=0, arr=[]) {
     if(id1 < arr1.length && id2 < arr2.length) {
         if(arr1[id1] < arr2[id2]) {
-        junctionArray(arr1, arr2, ++id1, id2, arr);
+            junctionArray(arr1, arr2, ++id1, id2, arr);
         } else if (arr1[id1] > arr2[id2]) {
-        junctionArray(arr1, arr2, id1, ++id2, arr);
+            junctionArray(arr1, arr2, id1, ++id2, arr);
         } else if(arr1[id1] == arr2[id2]){
-        arr[arr.length] = arr2[id2];
-        junctionArray(arr1, arr2, ++id1, ++id2, arr);
+            arr[arr.length] = arr2[id2];
+            junctionArray(arr1, arr2, ++id1, ++id2, arr);
         } 
     } else if (id1 == arr1.length-1 && id2 < arr2.length) {
         junctionArray(arr1, arr2, 0, id2, arr);
@@ -53,11 +134,15 @@ function substractArray(arr1, arr2, arr=[]) {
     return arr;
 }
 
-function eventAtAll(arr, event, max = arr.length, paramArr, id = 0) {
-    if(id < max) {
-        (paramArr === undefined)? arr[id].dispatchEvent(event) : arr[paramArr[id]].dispatchEvent(event)
-        eventAtAll(arr, event, max, paramArr, ++id);
+//! //TODO commenter la méthode
+function inArray(arr, value) {
+    for(const item of arr) {
+        if(item === value) {
+            return true;
+        }
     }
+    return false;
 }
 
-export { mergeArray, junctionArray, substractArray, eventAtAll}
+
+export { getItemInActiveTags, inActiveTags, inArray, junctionArray, mergeArray, mergeListOfArray, removeInActiveTags, substractArray }

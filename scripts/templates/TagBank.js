@@ -43,7 +43,6 @@ class TagBank {
             this.disableKeysRecipesBySearch = [];
             if(event.detail.length > 0) {
                 while(idRecipe < this.idRecipes.length) {
-                    //const name = searchString(this.recipes[idRecipe].normalizeName, event.detail);
                     if(this.query(idRecipe, event.detail)) {
                         this.enableIdRecipesBySearch[this.enableIdRecipesBySearch.length] = this.idRecipes[idRecipe];
                         this.enableKeysRecipesBySearch[this.enableKeysRecipesBySearch.length] = this.recipes[idRecipe].id;

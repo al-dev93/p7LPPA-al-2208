@@ -11,4 +11,6 @@ const INGREDIENT = 'ingredient';
 const DEVICE = 'device';
 const UTENSIL = 'utensil';
 
-export { DESIGN, INGREDIENT, DEVICE, UTENSIL }
+const ALLTAGS = [INGREDIENT, DEVICE, UTENSIL];
+
+export { DESIGN, INGREDIENT, DEVICE, UTENSIL, ALLTAGS }
