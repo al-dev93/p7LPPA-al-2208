@@ -1,8 +1,8 @@
-import { DESIGN }    from "../../scripts/utils/naming.js";
-import { addedTags } from "../templates/SearchDrive.js";
-import { Tag }       from "../../scripts/templates/Tag.js";
+import { DESIGN }  from "../../scripts/utils/naming.js";
+import { tagBank } from "../templates/SearchDrive.js";
+import { Tag }     from "../../scripts/templates/Tag.js";
 import { eventAtAll, templateClone }     from "../utils/template.js";
-import { junctionArray, inActiveTags, inArray }   from "../utils/array-handler-v1.js";
+import { addInArray, junctionArray, inActiveTags, inArray, removeInArray }   from "../utils/array-handler-v1.js";
 import { searchString, stringNormalize } from "../utils/string-convert.js";
 
 //COMMENT:  cible le template html des items de la liste déroulante de tags
@@ -22,7 +22,6 @@ class SearchTag {
         this.tagListElem = [];
         this.idTagList   = [...data.keys()];
         this.idTagListOn = [];
-        this.idTagListOff= [];
         this.background  = DESIGN.bg + this.theme;
         this.eventSearch = new Event('searchTag');
     }
@@ -32,10 +31,10 @@ class SearchTag {
         if(index < this.data.length) {
             this.insertTemplate(index, this.data[index].value);
             this.tagListElem = this.target.querySelectorAll('span');
-            this.addTagListControl(this.tagListElem[index], index);
+            this.addTagListEvent(this.tagListElem[index], index);
             this.createSearchTag(++index);
         }
-        this.controlsWidget();
+        this.addWidgetEvent();
     }
 
     // insère le template html des tags de la liste déroulante
@@ -46,8 +45,26 @@ class SearchTag {
         this.  target.appendChild(clone);
     }
 
+    // ajoute un tag dans la banque des tags
+    addTag(index) {
+        const idTag = this.theme + "-" + index;
+        if(!inActiveTags(this.searchDrive.listOfAddedTags, idTag)) {
+            new Tag(this.theme, this.data[index].value, idTag).addTag();
+            this.searchDrive.pushTag = [idTag, this.data[index].idRecipes];
+        }
+    }
+
+    //!//TODO commenter la méthode
+    removeTagInBank(event) {
+        const targetTag = tagBank.querySelector("[data-id ="+event.detail.idListOfTag+"]");
+        if(inActiveTags(this.searchDrive.listOfAddedTags, event.detail.idListOfTag)) {
+            targetTag.remove();
+            this.searchDrive.pullTag = event.detail.idListOfTag;
+        }
+    }
+
     // gestion de l'évènement insérant un tag dans la banque
-    addTagListControl(tag, index) {
+    addTagListEvent(tag, index) {
         tag.addEventListener('click',  ()      => this.addTag(index));
         tag.addEventListener('keydown',(event) => {
             if(event.key === 'Enter') {
@@ -60,53 +77,39 @@ class SearchTag {
         tag.addEventListener('searchTag',() => this.setTagListOnSearchTag(index));
     }
 
-    // ajoute un tag dans la banque des tags
-    addTag(index) {
-        const idTag = this.theme + "-" + index;
-        if(!inActiveTags(this.searchDrive.listOfAddedTags, idTag)) {
-            new Tag(this.theme, this.data[index].value, idTag).addTag();
-            this.searchDrive.pushTag = [idTag, this.data[index].idRecipes];
-        }
-    }
-
     // actualise la liste des tags suite à une recherche lancée dans le champ de recherche de recette
     setTagListOnSearchRecipe(tag, index) {
-        if(this.searchDrive.isOnSearch) {
-            const enableTags = junctionArray(this.searchDrive.searchedRecipesOn, this.data[index].idRecipes);
-            if(!enableTags.length) {
-                tag. classList.add('d-none');
-                this.idTagListOff[this.idTagListOff.length]= index;
-            } else {
-                tag. classList.remove('d-none');
-                this.idTagListOn[this.idTagListOn.length]  = index;
-            }
-        } else {
+        const enableTags = junctionArray(this.data[index].idRecipes, this.searchDrive.idRecipesOnBoard); //!
+        if(enableTags.length) {
             tag. classList.remove('d-none');
-            this.idTagListOn[index] = this.idTagList[index];
+            this.idTagListOn = addInArray(this.idTagListOn, index)
+        } else {
+            tag. classList.add('d-none');
+            this.idTagListOn = removeInArray(this.idTagListOn, index)
         }
     }
 
     //!//TODO commenter la méthode
     setTagListOnSearchTag(index) {
-        if(this.searchDrive.isOnSearch && inArray(this.idTagListOff, index)) {
-            return;
-        } else {
-            (searchString(this.data[index].normalize, stringNormalize(`${this.tagInput.value}`)))?
-                this.tagListElem[index].classList.remove('d-none') :
-                this.tagListElem[index].classList.add('d-none');
+        const searchTag = searchString(this.data[index].normalize, stringNormalize(this.tagInput.value));
+        let tagOn;
+
+        if(this.searchDrive.isOnSearch){
+            tagOn = inArray(this.idTagListOn, index);
+        }
+        if((this.tagInput.value === "" && !this.searchDrive.isOnSearch) || (this.tagInput.value === "" && tagOn))  {
+                this.tagListElem[index].classList.remove('d-none');
+        } else if((!this.searchDrive.isOnSearch && !searchTag) || (!searchTag && tagOn)) {
+            this.tagListElem[index].classList.add('d-none');
+        } else if((!this.searchDrive.isOnSearch && searchTag) || (searchTag && tagOn)) {
+            this.tagListElem[index].classList.remove('d-none');
         }
     }
 
     // gestion des évènement pour l'ouverture et la fermeture de la liste déroulante 
-    //FIXME quand cherche dans searchtag, l'affichage de la liste des taches reste verrouillée sur résultat recherche
-    controlsWidget() {
+    addWidgetEvent() {
         const labelInput = this.tagSearch.querySelector('label');
-        this.tagInput.addEventListener('focusin', () => {
-            if(this.tagInput.value === "") {
-                this.enableAllTagList();
-            }
-        });
-        this.tagInput.addEventListener ('input',   ()      => eventAtAll(this.tags, this.eventSearch));
+        this.tagInput.addEventListener ('input',   ()      => eventAtAll(this.tagListElem, this.eventSearch));
         this.tagSearch.addEventListener('focusin', ()      => this.openWidget(labelInput));
         this.tagSearch.addEventListener('focusout',()      => this.closeWidget(labelInput));
         this.tagSearch.addEventListener('keydown', (event) => this.escapeWidget(event));
@@ -115,21 +118,6 @@ class SearchTag {
         this.tagGroup.addEventListener ('keydown', (event) => this.escapeWidget(event));
         labelInput.addEventListener    ('click',   (event) => this.escapeWidget(event));
     }    
-
-    enableAllTagList(id = 0) {
-        if( id < this.tagListElem.length) {
-            this.tagListElem[id].classList.remove('d-none');
-            this.enableAllTagList(++id);
-        }
-    }
-
-    //!//TODO commenter la méthode
-    removeTagInBank(event) {
-        if(inActiveTags(this.searchDrive.listOfAddedTags, event.detail.idListOfTag)) {
-            addedTags[event.detail.idInTagBank].remove();
-            this.searchDrive.pullTag = event.detail.idListOfTag;
-        }
-    }
 
     // ouvre la liste déroulante
     openWidget(label) {

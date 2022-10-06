@@ -20,7 +20,7 @@ class Tag {
     // insère un nouveau tag
     addTag(){
         this.insertTemplate(); // template html
-        this.idTag= addedTags.length-1
+        this.idTag= addedTags.length-1;
         this.tag  = addedTags[this.idTag];
         this.controlTag();
     }

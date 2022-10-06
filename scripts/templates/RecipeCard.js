@@ -14,16 +14,12 @@ class RecipeCard{
         this.data       = data;
         this.ingredients= data.ingredients;
         this.key        = data.id;
-        // this.enableWithTag = true;
-        // this.enableWithSearch = true;
         this.card;
     }
 
     createRecipeCard() {
         this.insertTemplate();
         this.displayDrive();
-        // this.enabledControl();
-        // this.searchControl();
     }
     // insert le template html de la carte recette
     insertTemplate() {
@@ -51,36 +47,10 @@ class RecipeCard{
         }
     }
 
-    // enabledControl() {
-    //     this.card.addEventListener('enable-tag', (event) => {
-    //         if(event.detail.length === 0 && this.enableWithSearch) {
-    //             this.enableWithTag = true;
-    //             this.card.classList.remove('d-none');
-    //             return;
-    //         }
-    //         const selected = this.isSelected(event.detail, this.key);
-    //         console.log(event.detail, selected)
-    //         if(selected && !this.enableWithTag && this.enableWithSearch) {
-    //             this.enableWithTag = true;
-    //             this.card.classList.remove('d-none')
-    //         } else if(!selected && this.enableWithTag && this.enableWithSearch) {
-    //             this.enableWithTag = false;
-    //             this.card.classList.add('d-none');
-    //         }
-    //     });
-    // }
-
     displayDrive() {
         this.card.addEventListener('recipeOn', () => this.card.classList.remove('d-none'));
         this.card.addEventListener('recipeOff',() => this.card.classList.add('d-none'));
     }
-
-    // isSelected(recipeList, key, id = 0) {
-    //     while(id < recipeList.length && recipeList[id] !== key) {
-    //         id++;
-    //     }
-    //     return(recipeList[id] === key)
-    // }
 }
 
 export { RecipeCard, cardGallery }

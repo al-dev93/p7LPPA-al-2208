@@ -1,5 +1,5 @@
 import { ALLTAGS }      from "../utils/naming.js";
-import { getItemInActiveTags, junctionArray, mergeListOfArray, removeInActiveTags, substractArray } from "../utils/array-handler-v1.js";
+import { addInArray, getItemInActiveTags, junctionArray, junctionListOffArray, removeInActiveTags, removeInArray, substractArray } from "../utils/array-handler-v1.js";
 import { searchString } from "../utils/string-convert.js";
 import { eventAtAll }   from "../utils/template.js";
 import { cardGallery }  from "../templates/RecipeCard.js";
@@ -11,46 +11,42 @@ const addedTags  = tagBank.getElementsByClassName('badge');
 class SearchDrive {
     constructor(recipes) {
         //!//TODO commenter
-        this.recipes     = recipes;
-        this.idRecipes   = [...recipes.keys()];
+        this.recipes           = recipes;
+        this.idRecipes         = [...recipes.keys()];
         //!//TODO commenter
-        this.wordSearched= "";
-        this.isSearched  = 0;
+        this.wordSearched      = "";
+        this.isSearched        = 0;
         this.idSearchRecipesOn = [];
         this.idSearchRecipesOff= [];
         //!//TODO commenter
-        this.addedTag    = [];
-        this.removedTag  = [];
-        this.isTagged    = 0;
-        this.activeTags  = [];
+        this.addedTag          = [];
+        this.removedTag        = [];
+        this.isTagged          = 0;
+        this.activeTags        = [];
         //!//TODO commenter
-        this.idTaggedRecipesOn;
-        this.idTaggedRecipesOff;
+        this.idTaggedRecipesOn = [];
         //!//TODO commenter
-        this.idRecipesOn = this.idRecipes;
-        this.idRecipesOff= [];
+        this.idRecipesOn       = this.idRecipes;
+        this.idRecipesOff      = [];
         //!//TODO commenter
-        this.eventOnRecipes = new Event('recipeOn');
-        this.eventOffRecipes= new Event('recipeOff');
+        this.eventOnRecipes    = new Event('recipeOn');
+        this.eventOffRecipes   = new Event('recipeOff');
     }
 
     setTaggedRecipes() {
-        this.idTaggedRecipesOn = mergeListOfArray(this.activeTags);
-        console.log(this.idTaggedRecipesOn)
-        this.idTaggedRecipesOff= substractArray(this.idRecipes, this.idTaggedRecipesOn);
-        console.log(this.idTaggedRecipesOff)
+        this.idTaggedRecipesOn = junctionListOffArray(this.activeTags);
         this.setDisplayRecipes();
     }
 
     setSearchedRecipes(recipe = 0) {
-        this.idSearchRecipesOn = [];
-        this.idSearchRecipesOff= [];
         if(this.isSearched) {
             while(recipe < this.idRecipes.length) {
                 if(this.getQuery(recipe)) {
-                    this.idSearchRecipesOn[this.idSearchRecipesOn.length]  = this.idRecipes[recipe];
+                    this.idSearchRecipesOn = addInArray(this.idSearchRecipesOn, this.idRecipes[recipe]);
+                    this.idSearchRecipesOff = removeInArray(this.idSearchRecipesOff, this.idRecipes[recipe]);
                 } else {
-                    this.idSearchRecipesOff[this.idSearchRecipesOff.length]= this.idRecipes[recipe];
+                    this.idSearchRecipesOff = addInArray(this.idSearchRecipesOff, this.idRecipes[recipe]);
+                    this.idSearchRecipesOn = removeInArray(this.idSearchRecipesOn, this.idRecipes[recipe]);
                 }
                 ++recipe;
             }
@@ -70,23 +66,22 @@ class SearchDrive {
 
     setDisplayRecipes() {
         switch (true) {
-            case this.isSearched && this.isTagged:
+            case (this.isSearched > 0) && (this.isTagged > 0):
                 this.idRecipesOn = junctionArray(this.idSearchRecipesOn, this.idTaggedRecipesOn);
                 break;
-            case this.isSearched && !this.isTagged:
+            case (this.isSearched > 0) && (this.isTagged == 0):
                 this.idRecipesOn = this.idSearchRecipesOn;
                 break;
-            case !this.isSearched && this.isTagged:
+            case (this.isSearched == 0) && (this.isTagged > 0):
                 this.idRecipesOn = this.idTaggedRecipesOn;
                 break;
             default:
+                this.idRecipesOn = this.idRecipes;
                 break;
         }
         this.idRecipesOff = substractArray(this.idRecipes, this.idRecipesOn);
         this.sendToRecipes();
-        if(this.isTagged) {
-            this.sendToTagsList;
-        }
+        this.sendToTagsList();
     }
 
     sendToRecipes() {
@@ -101,9 +96,7 @@ class SearchDrive {
     sendToTagsList(tag = 0) {
         while (tag < ALLTAGS.length) {
             const tagElement = document.getElementById(ALLTAGS[tag] + '-tag-list').querySelectorAll('span');
-            if(this.idSearchRecipesOn.length) {
-                eventAtAll(tagElement, this.eventOnRecipes);
-            }
+            eventAtAll(tagElement, this.eventOnRecipes);
             ++tag;
         }
     }
@@ -144,16 +137,20 @@ class SearchDrive {
         return this.wordSearched;
     }
 
-    get searchedRecipesOn() {
+    get idRecipesOnBoard() {
+        return this.idRecipesOn;
+    }
+
+    get searchedRecipesOn() { //HACK voir si utile
         return this.idSearchRecipesOn;
     }
 
-    get searchedRecipesOff() {
+    get searchedRecipesOff() { //HACK voir si utile
         return this.idSearchRecipesOff;
     }
 
     get isOnSearch() {
-        return (this.wordSearched.length && this.idSearchRecipesOff.length);
+        return (this.isSearched && this.idSearchRecipesOff.length); //TODO a vérifier 
     }
 }
 
