@@ -1,4 +1,4 @@
-//COMMENT: fonctions testant le type des données traitées par le module data-handle
+// COMMENT: fonctions testant le type des données traitées par le module data-handle
 
 // teste si une value: valeur simple de type number, string, boolean
 function isValue(value) {

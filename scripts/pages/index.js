@@ -1,51 +1,79 @@
-import { loadData } from "../../scripts/api/api.js";
 import { DEVICE, INGREDIENT, UTENSIL } from "../../scripts/utils/naming.js";
-import { TagBank, tagBank } from "../templates/TagBank.js";
-import { SearchTag } from "../templates/SearchTag.js";
-import { RecipeCard } from "../templates/RecipeCard.js";
-import { stringNormalize } from "../utils/string-convert.js";
+import { loadData }                    from "../../scripts/api/api.js";
+import { templateClone }               from "../utils/template.js";
+import { SearchDrive }                 from "../templates/SearchDrive.js";
+import { SearchTag }                   from "../templates/SearchTag.js";
+import { RecipeCard }                  from "../templates/RecipeCard.js";
+import { stringNormalize }             from "../utils/string-convert.js";
 
-const inputSearch = document.getElementById('recipes-search');
+// COMMENT: cible le champ de recherche principale
+const inputSearch         = document.getElementById('recipes-search');
+// COMMENT: cible template html et insertion du message recherche vide
+const searchAlert         = document.getElementById('search-alert');
+const searchAlertTemplate = document.getElementById('search-alert-template');
 
-function searchRecipe () {
+
+// insère le message d'alerte dans la page
+searchAlert.addEventListener('emptySearch', () =>{
+    const [{clone}] = templateClone(searchAlertTemplate, '.alert');
+    searchAlert.appendChild(clone);
+    addAlertEvent();
+});
+
+// retire le message d'alerte
+function addAlertEvent() {
+    const closeSearchAlert = document.querySelector('.alert .bi-x-circle');
+    closeSearchAlert.addEventListener('click',   (event) => removeAlert(event));
+    closeSearchAlert.addEventListener('keydown', (event) => removeAlert(event));
+    closeSearchAlert.focus();
+}
+
+function removeAlert(event) {
+    if((event.type === 'keydown' && event.key === 'Enter') || event.type === 'click') {
+        searchAlert.innerHTML = "";
+        event.preventDefault();
+        event.stopPropagation();
+        inputSearch.focus();
+    }
+}
+
+// gestion du champ de recherche principale
+function searchRecipe (searchDrive) {
     inputSearch.addEventListener('input',(event) => {
         const value = stringNormalize(`${inputSearch.value}`);
         if(value === "" || value.length >= 3 || event.inputType === "deleteContentBackward") {
-            const searchEvent = new CustomEvent (
-                'search-recipe', {
-                    bubbles: true,
-                    detail: value
-                });
-            tagBank.dispatchEvent(searchEvent);
+            searchDrive.inputWord = value; // transmission de l'expression recherchée à l'objet gestionnaire
         }
     });
 }
-
-function loadSearchTag(ingredients, devices, utensils, tagsBank) {
-    const ingredientsTagList = new SearchTag(INGREDIENT, ingredients, tagsBank);
-    const devicesTagList = new SearchTag(DEVICE, devices, tagsBank);
-    const utensilsTagList = new SearchTag(UTENSIL, utensils, tagsBank);
-    ingredientsTagList.createSearchTag();
-    devicesTagList.createSearchTag();
-    utensilsTagList.createSearchTag();
+// création des objets de recherche par tags
+function loadSearchTag(ingredients, devices, utensils, searchDrive) {
+    new SearchTag(INGREDIENT, ingredients, searchDrive).createSearchTag();
+    new SearchTag(DEVICE, devices, searchDrive).createSearchTag();
+    new SearchTag(UTENSIL, utensils, searchDrive).createSearchTag();
 }
-
-function loadRecipeCard(recipeList, id = 0, recipeCard = []) {
+// création des cartes recettes
+function loadRecipeCard(recipeList, id = 0) {
     if(id < recipeList.length) {
-        recipeCard[id] = new RecipeCard(id, recipeList[id]);
-        recipeCard[id].createRecipeCard();
-        loadRecipeCard(recipeList, ++id, recipeCard);
+        new RecipeCard(id, recipeList[id]).createRecipeCard();
+        loadRecipeCard(recipeList, ++id);
     }
 }
 
 function run() {
-    const [{ingredients}, {devices}, {utensils}, {recipeList}] = loadData() ;
-    console.log(recipeList)
-    const onTags = new TagBank(recipeList);
-    onTags.initTagBank();
-    loadSearchTag(ingredients, devices, utensils, onTags);
+    // chargement des données
+    const [ {ingredients}, 
+            {devices}, 
+            {utensils}, 
+            {recipeList}]  = loadData() ;
+    // création de l'objet gestionnaire de recherche
+    const searchDrive      = new SearchDrive(recipeList);
+    // chargement des widgets de recherche par tag
+    loadSearchTag( ingredients, devices, utensils, searchDrive);
+    // chargement des cartes recettes
     loadRecipeCard(recipeList);
-    searchRecipe();
+    // chargement du gestionnaire de recherche
+    searchRecipe  (searchDrive);
 }
 
 run();

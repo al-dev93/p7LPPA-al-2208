@@ -46,9 +46,15 @@ $lppa-colors: (
 "search": #E7E7E7,
 "image": #C7BEBE
 );
+$lppa-spacers: (
+    6: $spacer*4,
+    7: $spacer*5,
+    8: $spacer*6.25
+);
 
 // $grays : map-merge($grays, $lppa-grays);
 $theme-colors : map-merge($theme-colors, $lppa-colors);
+$spacers : map-merge($spacers, $lppa-spacers);
 $font-family-sans-serif : append($font-family-sans-serif, 'DM Sans');
 $font-family-sans-serif : append($font-family-sans-serif, 'Lato');
 $input-padding-y : $input-btn-padding-y * 3.333333;

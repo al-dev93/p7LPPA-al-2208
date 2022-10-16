@@ -132,3 +132,7 @@ dist
 # scss bootstrap
 css/style.css.map
 scss/style.scss
+scss/main.scss
+package.json
+package-lock.json
+.eslintrc.js
