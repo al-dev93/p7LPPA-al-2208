@@ -1,12 +1,12 @@
-//! //TODO commentaire général 
+// COMMENT: fonctions de manipulation de chaînes de caractères 
 
 // convertit le premier caractère en majuscule
 function stringCapitalize(string) {
     return (string).charAt(0).toUpperCase()+string.substr(1);
 }
 
-/* convertit la chaine de caratère en majuscule 
-   et remplace les caratères diacritiques */
+/* convertit la chaine de caratère en majuscule //
+// et remplace les caratères diacritiques       */
 function stringNormalize(string) {
     return (string).normalize('NFD').replace(/[\u0300-\u036f]/g, '').toUpperCase()
 }
@@ -33,8 +33,8 @@ function extractFirstWord(string){
 
 // retourne le pluriel du mot
 function pluralWord(word) {
-    const str = stringNormalize(word);
-    const twoLastChar = str.substring(str.length-2);
+    const str           = stringNormalize(word);
+    const twoLastChar   = str.substring(str.length-2);
     const threeLastChar = str.substring(str.length-3);
     if(twoLastChar === 'AU' || (twoLastChar === 'EU' && str !== 'BLEU') || threeLastChar === 'EAU' || str === 'CHOU') {
         return word+'x';
@@ -45,7 +45,7 @@ function pluralWord(word) {
     return word+'s';
 }
 
-//!//TODO commenter la fonction
+// recherche un caractère dans une chaîne, indique s'il est présent et sa position
 function searchFirstChar(str, char) {
     const firstChar = [];
     for(const i in str) {
@@ -56,7 +56,7 @@ function searchFirstChar(str, char) {
     return (firstChar.length > 0)? firstChar: false;
 }
 
-//!//TODO commenter la fonction
+// extrait une sous-chaîne entre une position de début et de fin
 function searchSubstring(str, start, end) {
     let i = start;
     let result = "";
@@ -67,7 +67,7 @@ function searchSubstring(str, start, end) {
     return result;
 }
 
-//!//TODO commenter la fonction
+// indique si une chaîne est présente dans une autre
 function searchString(str1, str2) {
     const charPos = searchFirstChar(str1, str2[0]);
     let charResult;     
@@ -83,7 +83,6 @@ function searchString(str1, str2) {
 // retourne le singulier du mot 
 function singularWord(word) {
     const str = stringNormalize(word);
-    //const twoLastChar = str.substring(str.length-2);
     const threeLastChar = str.substring(str.length-3);
     if(threeLastChar === 'AUX'&& (str === 'BAUX' || str === 'CORAUX' || str === 'EMAUX' || str === 'SOUPIRAUX' || str === 'TRAVAUX' || 
         str === 'VENTAUX' || str === 'VITRAUX')) {
@@ -94,8 +93,8 @@ function singularWord(word) {
 
 // applique le pluriel ou le singulier en fonction de la quantité
 function agreementConvert(quantity, string) {
-    const word = extractFirstWord(string);
-    const str = stringNormalize(word);
+    const word     = extractFirstWord(string);
+    const str      = stringNormalize(word);
     const lastChar = str[str.length-1];
     if(quantity > 1 && (lastChar === 'S' || lastChar === 'X')) {
         return word;
@@ -108,7 +107,5 @@ function agreementConvert(quantity, string) {
         return word;
     }
 }
-
-
 
 export { stringCapitalize, stringNormalize, searchString, unitSymbol, agreementConvert }

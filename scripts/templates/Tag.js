@@ -2,24 +2,24 @@ import { DESIGN }             from "../../scripts/utils/naming.js";
 import { templateClone }      from "../utils/template.js";
 import { tagBank, addedTags } from "../templates/SearchDrive.js";
 
-//COMMENT  cible le template html des tags
+// COMMENT:  cible le template html des tags
 const tagTemplate = document.getElementById('tag-template');
 
-//COMMENT créée les tags qui sont insérés dans la banque
+// COMMENT: crée les tags insérés dans la banque
 class Tag {
     constructor(theme, name, idAttr){
         this.theme     = theme;
         this.name      = name;
         this.idTagAttr = idAttr;
-        this.background= DESIGN.tbg + this.theme;
-        this.searchTag = document.getElementById(this.theme + '-tag-search');
-        this.idTag;
-        this.tag;
+        this.background= DESIGN.tbg + this.theme; // thème du tag
+        this.searchTag = document.getElementById(this.theme + '-tag-search'); // cible le widget de recherche
+        this.idTag;                               // clé du tag
+        this.tag;                                 // tag en cours
     }
 
     // insère un nouveau tag
     addTag(){
-        this.insertTemplate(); // template html
+        this.insertTemplate(); // insère le template html
         this.idTag= addedTags.length-1;
         this.tag  = addedTags[this.idTag];
         this.controlTag();

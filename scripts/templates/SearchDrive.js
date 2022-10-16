@@ -1,43 +1,45 @@
-import { ALLTAGS }      from "../utils/naming.js";
-import { addInArray, getItemInActiveTags, junctionArray, junctionListOffArray, removeInActiveTags, removeInArray, substractArray } from "../utils/array-handler-v1.js";
-import { searchString } from "../utils/string-convert.js";
-import { eventAtAll }   from "../utils/template.js";
-import { cardGallery }  from "../templates/RecipeCard.js";
+import { ALLTAGS }                      from "../utils/naming.js";
+import { addInArray, getItemInActiveTags, junctionArray, junctionListOfArray, removeInActiveTags, 
+        removeInArray, substractArray } from "../utils/array-handler.js";
+import { searchString }                 from "../utils/string-convert.js";
+import { eventAtAll }                   from "../utils/template.js";
+import { cardGallery }                  from "../templates/RecipeCard.js";
 
-const recipeCards= cardGallery.getElementsByClassName('recipe-card');
-const tagBank    = document.getElementById('tag-bank');
-const addedTags  = tagBank.getElementsByClassName('badge');
+// COMMENT: cibles des éléments utilisés par la classe SearchDrive
+const recipeCards= cardGallery.getElementsByClassName('recipe-card'); // cible la galerie des cartes recettes
+const tagBank    = document.   getElementById('tag-bank');            // cible la banque des tags
+const addedTags  = tagBank.    getElementsByClassName('badge');       // contient la collection des tags en banque
 
+// COMMENT: classe de l'objet gestionnaire de recherche
 class SearchDrive {
     constructor(recipes) {
-        //!//TODO commenter
+        // données sur les recettes
         this.recipes           = recipes;
         this.idRecipes         = [...recipes.keys()];
-        //!//TODO commenter
+        this.idRecipesOn       = this.idRecipes;      // recettes affichées
+        this.idRecipesOff      = [];                  // recettes non affichées
+        // données sur la recherche principale
         this.wordSearched      = "";
-        this.isSearched        = 0;
-        this.idSearchRecipesOn = [];
-        this.idSearchRecipesOff= [];
-        //!//TODO commenter
-        this.addedTag          = [];
-        this.removedTag        = [];
-        this.isTagged          = 0;
-        this.activeTags        = [];
-        //!//TODO commenter
-        this.idTaggedRecipesOn = [];
-        //!//TODO commenter
-        this.idRecipesOn       = this.idRecipes;
-        this.idRecipesOff      = [];
-        //!//TODO commenter
+        this.isSearched        = 0;  // indicateur de recherche en cours
+        this.idSearchRecipesOn = []; // recettes sorties suite à une recherche
+        this.idSearchRecipesOff= []; // recettes non sorties
+        // données sur la recherche par tag
+        this.addedTag          = []; // dernier tag ajouté
+        this.removedTag        = []; // dernier tag retiré
+        this.isTagged          = 0;  // nombre de tags actifs
+        this.activeTags        = []; // banque des tags
+        this.idTaggedRecipesOn = []; // recettes sorties suite à une recherche par tag        
+        // évènements pour affichage - masquage des recettes
         this.eventOnRecipes    = new Event('recipeOn');
         this.eventOffRecipes   = new Event('recipeOff');
+        this.eventEmptySearch  = new Event('emptySearch');
     }
-
+    // tableau des recettes associées aux tags placés en banque
     setTaggedRecipes() {
-        this.idTaggedRecipesOn = junctionListOffArray(this.activeTags);
+        this.idTaggedRecipesOn = junctionListOfArray(this.activeTags);
         this.setDisplayRecipes();
     }
-
+    // tableaux on et off des recettes sorties suite à une recherche
     setSearchedRecipes(recipe = 0) {
         if(this.isSearched) {
             while(recipe < this.idRecipes.length) {
@@ -56,14 +58,16 @@ class SearchDrive {
         }
         this.setDisplayRecipes();
     }
-
+    // recherche le mot transmis dans les recettes selon les critères: nom, ingrédients, description
     getQuery(recipe) {
-        const name           = searchString(this.recipes[recipe].normalizeName, this.wordSearched);
-        const description    = searchString(this.recipes[recipe].normalizeDescription, this.wordSearched);
-        const listIngredients= searchString(this.recipes[recipe].listIngredients, this.wordSearched);
-        return name || description || listIngredients;
+        let query = searchString(this.recipes[recipe].normalizeName, this.wordSearched);
+        if(query) {
+            return query;
+        }
+        query = searchString(this.recipes[recipe].listIngredients, this.wordSearched);
+        return (query)? query : searchString(this.recipes[recipe].normalizeDescription, this.wordSearched)
     }
-
+    // affichage des recettes prenant en compte la recherche par tags et la recherche principale
     setDisplayRecipes() {
         switch (true) {
             case (this.isSearched > 0) && (this.isTagged > 0):
@@ -82,8 +86,11 @@ class SearchDrive {
         this.idRecipesOff = substractArray(this.idRecipes, this.idRecipesOn);
         this.sendToRecipes();
         this.sendToTagsList();
+        if(!this.idRecipesOn.length) {
+            document.getElementById('search-alert').dispatchEvent(this.eventEmptySearch);
+        }
     }
-
+    // transmission de l'ordre d'affichage / masquage aux cartes recettes
     sendToRecipes() {
         if(this.idRecipesOn.length)  {
             eventAtAll(recipeCards, this.eventOnRecipes, this.idRecipesOn.length, this.idRecipesOn);
@@ -92,7 +99,7 @@ class SearchDrive {
             eventAtAll(recipeCards, this.eventOffRecipes, this.idRecipesOff.length, this.idRecipesOff);
         }
     }
-
+    // transmission de l'ordre d'affichage aux listes de tags
     sendToTagsList(tag = 0) {
         while (tag < ALLTAGS.length) {
             const tagElement = document.getElementById(ALLTAGS[tag] + '-tag-list').querySelectorAll('span');
@@ -100,57 +107,49 @@ class SearchDrive {
             ++tag;
         }
     }
-
+    // retourne le contenu de la banque des tags
     get listOfAddedTags() {
         return this.activeTags;
     }
-
+    // ajoute un tag en banque
     set pushTag(tag) {
         this.addedTag                          = tag;
         this.activeTags[this.activeTags.length]= tag;
         ++this.isTagged;
         this.setTaggedRecipes();
     }
-
+    // retourne le dernier tag ajouté
     get pushTag() {
         return this.addedTag;
     }
-
+    // retire un tag de la banque
     set pullTag(idTag) {
         this.removedTag = getItemInActiveTags(this.activeTags, idTag);
         this.activeTags = removeInActiveTags(this.activeTags, idTag);
         --this.isTagged;
         this.setTaggedRecipes();
     }
-
+    // retourne le dernier tag retiré
     get pullTag() {
         return this.removedTag;
     }
-
+    // transmet le contenu de la recherche principale
     set inputWord(word) {
         this.wordSearched= word;
         this.isSearched  = word.length;
         this.setSearchedRecipes();
     }
-
+    // retourne l'expression à rechercher du champ de recherche principale
     get inputWord() {
         return this.wordSearched;
     }
-
+    // retourne le tableau des recettes actives à l'affichage
     get idRecipesOnBoard() {
         return this.idRecipesOn;
     }
-
-    get searchedRecipesOn() { //HACK voir si utile
-        return this.idSearchRecipesOn;
-    }
-
-    get searchedRecipesOff() { //HACK voir si utile
-        return this.idSearchRecipesOff;
-    }
-
+    // indique qu'une recherche est en cours
     get isOnSearch() {
-        return (this.isSearched && this.idSearchRecipesOff.length); //TODO a vérifier 
+        return (this.isSearched && this.idSearchRecipesOff.length);
     }
 }
 
