@@ -5,6 +5,8 @@ import { searchString }                 from "../utils/string-convert.js";
 import { eventAtAll }                   from "../utils/template.js";
 import { cardGallery }                  from "../templates/RecipeCard.js";
 
+// NOTE: première version de l'agorithme de recherche
+
 // COMMENT: cibles des éléments utilisés par la classe SearchDrive
 const recipeCards= cardGallery.getElementsByClassName('recipe-card'); // cible la galerie des cartes recettes
 const tagBank    = document.   getElementById('tag-bank');            // cible la banque des tags

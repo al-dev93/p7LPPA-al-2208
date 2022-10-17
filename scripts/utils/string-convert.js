@@ -1,3 +1,5 @@
+// NOTE: première version de l'agorithme de recherche
+
 // COMMENT: fonctions de manipulation de chaînes de caractères 
 
 // convertit le premier caractère en majuscule

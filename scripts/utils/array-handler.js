@@ -1,3 +1,5 @@
+// NOTE: première version de l'agorithme de recherche
+
 /*  COMMENT: fonctions utilisées pour la manipulation de tableaux              
 //  utilisent des fonctions récursives, des boucles for ou des boucles while */
 
