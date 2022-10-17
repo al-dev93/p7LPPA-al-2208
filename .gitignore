@@ -128,3 +128,11 @@ dist
 .yarn/build-state.yml
 .yarn/install-state.gz
 .pnp.*
+
+# scss bootstrap
+css/style.css.map
+scss/style.scss
+scss/main.scss
+package.json
+package-lock.json
+.eslintrc.js
