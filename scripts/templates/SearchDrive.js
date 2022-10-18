@@ -1,11 +1,11 @@
 import { ALLTAGS }                      from "../utils/naming.js";
-import { addInArray, getItemInActiveTags, junctionArray, junctionListOfArray, removeInActiveTags, 
-        removeInArray, substractArray } from "../utils/array-handler.js";
+import { getItemInActiveTags, junctionArray, junctionListOfArray, removeInActiveTags, 
+        substractArray } from "../utils/array-handler.js";
 import { searchString }                 from "../utils/string-convert.js";
 import { eventAtAll }                   from "../utils/template.js";
 import { cardGallery }                  from "../templates/RecipeCard.js";
 
-// NOTE: première version de l'agorithme de recherche
+// NOTE: deuxième version de l'agorithme de recherche
 
 // COMMENT: cibles des éléments utilisés par la classe SearchDrive
 const recipeCards= cardGallery.getElementsByClassName('recipe-card'); // cible la galerie des cartes recettes
@@ -42,24 +42,17 @@ class SearchDrive {
         this.setDisplayRecipes();
     }
     // tableaux on et off des recettes sorties suite à une recherche
-    setSearchedRecipes(recipe = 0) {
+    setSearchedRecipes() {
         if(this.isSearched) {
-            while(recipe < this.idRecipes.length) {
-                if(this.getQuery(recipe)) {
-                    this.idSearchRecipesOn = addInArray(this.idSearchRecipesOn, this.idRecipes[recipe]);
-                    this.idSearchRecipesOff = removeInArray(this.idSearchRecipesOff, this.idRecipes[recipe]);
-                } else {
-                    this.idSearchRecipesOff = addInArray(this.idSearchRecipesOff, this.idRecipes[recipe]);
-                    this.idSearchRecipesOn = removeInArray(this.idSearchRecipesOn, this.idRecipes[recipe]);
-                }
-                ++recipe;
-            }
+            this.idSearchRecipesOn = this.idRecipes.filter(recipe => this.getQuery(recipe));
+            this.idSearchRecipesOff = substractArray(this.idRecipes, this.idSearchRecipesOn)
         } else {
             this.idSearchRecipesOn = this.idRecipes
             this.idSearchRecipesOff= [] 
         }
         this.setDisplayRecipes();
     }
+
     // recherche le mot transmis dans les recettes selon les critères: nom, ingrédients, description
     getQuery(recipe) {
         let query = searchString(this.recipes[recipe].normalizeName, this.wordSearched);
@@ -69,6 +62,7 @@ class SearchDrive {
         query = searchString(this.recipes[recipe].listIngredients, this.wordSearched);
         return (query)? query : searchString(this.recipes[recipe].normalizeDescription, this.wordSearched)
     }
+
     // affichage des recettes prenant en compte la recherche par tags et la recherche principale
     setDisplayRecipes() {
         switch (true) {
@@ -95,19 +89,18 @@ class SearchDrive {
     // transmission de l'ordre d'affichage / masquage aux cartes recettes
     sendToRecipes() {
         if(this.idRecipesOn.length)  {
-            eventAtAll(recipeCards, this.eventOnRecipes, this.idRecipesOn.length, this.idRecipesOn);
+            eventAtAll(recipeCards, this.eventOnRecipes, this.idRecipesOn);
         }
         if(this.idRecipesOff.length) {
-            eventAtAll(recipeCards, this.eventOffRecipes, this.idRecipesOff.length, this.idRecipesOff);
+            eventAtAll(recipeCards, this.eventOffRecipes, this.idRecipesOff);
         }
     }
     // transmission de l'ordre d'affichage aux listes de tags
-    sendToTagsList(tag = 0) {
-        while (tag < ALLTAGS.length) {
-            const tagElement = document.getElementById(ALLTAGS[tag] + '-tag-list').querySelectorAll('span');
+    sendToTagsList() {
+        ALLTAGS.forEach(item => {
+            const tagElement = document.getElementById(item + '-tag-list').querySelectorAll('span');
             eventAtAll(tagElement, this.eventOnRecipes);
-            ++tag;
-        }
+        })
     }
     // retourne le contenu de la banque des tags
     get listOfAddedTags() {
@@ -127,7 +120,7 @@ class SearchDrive {
     // retire un tag de la banque
     set pullTag(idTag) {
         this.removedTag = getItemInActiveTags(this.activeTags, idTag);
-        this.activeTags = removeInActiveTags(this.activeTags, idTag);
+        removeInActiveTags(this.activeTags, idTag);
         --this.isTagged;
         this.setTaggedRecipes();
     }
