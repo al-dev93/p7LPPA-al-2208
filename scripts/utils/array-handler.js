@@ -1,155 +1,81 @@
-// NOTE: première version de l'agorithme de recherche
+// NOTE: deuxième version de l'agorithme de recherche
 
 /*  COMMENT: fonctions utilisées pour la manipulation de tableaux              
 //  utilisent des fonctions récursives, des boucles for ou des boucles while */
 
 // teste si une valeur est présente dans un tableau
 function inArray(arr, value) {
-    for(const item of arr) {
-        if(item === value) {
-            return true;
-        }
-    }
-    return false;
+    return arr.includes(value);
 }
 
 // ajoute une valeur dans un tableau sans doublon
-function addInArray(arr, value, added = []) {
-    let isAdded = false, isIn = false;
-    if(!arr.length) { 
-        added[added.length] = value; 
+function addInArray(arr, value) {
+    if(arr.includes(value)) {
+        return;
     }
-    // parcourt chaque élément du tableau
-    for(const item in arr) {
-        if(arr[+item] <= value) {
-            added[+item]       = arr[+item];
-            if(arr[+item] == value) { 
-                ++isIn; 
-            }
-            if(+item == arr.length-1 && !isIn) { 
-                added[+item+1] = value; 
-            }
-        } else if(arr[+item] > value && !isAdded && !isIn) {
-            added[+item]       = value;
-            added[+item+1]     = arr[+item]
-            ++isAdded;
-        } else if(arr[+item] > value && isAdded && !isIn) {
-            added[+item+1]     = arr[+item]
-        } else if(arr[+item] > value && !isAdded && isIn) {
-            added[+item]       = arr[+item];
+    if(!arr.length) {
+        arr.push(value);
+        return;
+    }
+    arr.every((item, index, array) => {
+        if(value < item) {
+            array.splice(index, 0, value);
+        } else if(value > item && index === array.length-1) {
+            array.push(value);
+            return value < item;
         }
-    }
-    return added;
+        return value > item;
+    });
 }
 
 // retire une valeur d'un tableau
-function removeInArray(arr, value, removed = []) {
-    let isRemoved = false;
-    for(const item in arr) {
-        if(arr[+item] < value) {
-            removed[+item] = arr[+item];
-        } else if(arr[+item] === value) {
-            ++isRemoved;
-        } else if(arr[+item] > value) {
-            (isRemoved)? removed[+item-1] = arr[+item] : removed[+item] = arr[+item];
-        }
+function removeInArray(arr, value) {
+    const index = arr.indexOf(value);
+    if(index === -1 || !arr.length) {
+        return;
     }
-    return removed;
-}
-
-// fusionne deux tableaux sans doublons
-function mergeArray(arr1, arr2, id1=0, id2=0, arr=[]) {
-    if(id1 < arr1.length && id2 < arr2.length && arr1[id1] == arr2[id2]) {
-        arr[arr.length] = arr1[id1];
-        mergeArray(arr1, arr2, ++id1, ++id2, arr);
-    } else if(id1 < arr1.length && (id2 == arr2.length || arr1[id1] < arr2[id2])) {
-        arr[arr.length] = arr1[id1];
-        mergeArray(arr1, arr2, ++id1, id2, arr);
-    } else if(id2 < arr2.length && (id1 == arr1.length || arr2[id2] < arr1[id1])) {
-        arr[arr.length] = arr2[id2];
-        mergeArray(arr1, arr2, id1, ++id2, arr);
-    }
-    return arr;
+    arr.splice(index, 1);
 }
 
 // réalise l'intersection de deux tableaux
-function junctionArray(arr1, arr2, id1=0, id2=0, arr=[]) {
-    if(id1 < arr1.length && id2 < arr2.length) {
-        if(arr1[id1] < arr2[id2]) {
-            junctionArray(arr1, arr2, ++id1, id2, arr);
-        } else if (arr1[id1] > arr2[id2]) {
-            junctionArray(arr1, arr2, id1, ++id2, arr);
-        } else if(arr1[id1] == arr2[id2]){
-            arr[arr.length] = arr2[id2];
-            junctionArray(arr1, arr2, ++id1, ++id2, arr);
-        } 
-    } else if (id1 == arr1.length-1 && id2 < arr2.length) {
-        junctionArray(arr1, arr2, 0, id2, arr);
-    }
-    return arr;
+function junctionArray(arr1, arr2) {
+    return arr1.filter(item => arr2.includes(item));
 }
 
 // réalise la soustraction de deux tableaux
-function substractArray(arr1, arr2, arr=[]) {
-    const duplicate    = junctionArray(arr1, arr2);
-    const noDuplicate1 = extractDuplicate(arr1, duplicate);
-    const noDuplicate2 = extractDuplicate(arr2, duplicate);
-    arr = mergeArray(noDuplicate1, noDuplicate2);
-    return arr;
-}
-
-// extrait les doublons d'un tableau
-function extractDuplicate(arr1, arr2, id1 = 0, id2 = 0, arr = []) {
-    if(id1 < arr1.length && id2 <= arr2.length) {
-        if(arr1[id1] == arr2[id2]) {
-            extractDuplicate(arr1, arr2, ++id1, ++id2, arr);
-        } else {
-            arr[arr.length] = arr1[id1];
-            extractDuplicate(arr1, arr2, ++id1, id2, arr);
-        }
-    }
-    return arr;
+function substractArray(arr1, arr2) {
+    return arr1
+    .filter(item => !arr2.includes(item))
+    .concat(arr2.filter(item => !arr1.includes(item)));
 }
 
 // teste si un tag, dont la clé passée en paramètre, est présent dans la banque des tags
 function inActiveTags(arr, id) {
-    for(const item in arr) {
-        if(arr[+item][0] === id) {
-            return true;
-        }
-    }
-    return false;
+    return arr.flat().includes(id);
 }
 
 // retourne le tag dont la clé est transmise en paramètre, false si le tag n'est pas en banque
 function getItemInActiveTags(arr, id) {
-    for(const item in arr) {
-        if(arr[+item][0] === id) {
-            return arr[+item];
-        }
-    }
-    return false;
+    return arr.filter(item => item[0] === id).flat();
 }
 
 // retire le tag, dont la clé est transmise, de la banque et retourne sa valeur 
-function removeInActiveTags(arr, id, removed = []) {
-    for(const item in arr) {
-        if(arr[+item][0] !== id) {
-            removed[removed.length] = arr[+item];
+function removeInActiveTags(arr, id) {
+    arr.every((item, index) => {
+        if(item[0] !== id) {
+            return item[0] !== id;
+        } else {
+            arr.splice(index, 1);
         }
-    }
-    return removed;
+    });
 }
 
 /*  COMMENT: réalise l'intersection des listes de recettes contenues dans les tags //
 //  pour l'ensemble des tags en banque                                             */
 function junctionListOfArray(arrays) {
-    let id = 0, junction = [];
-    for(const arr of arrays) {
-        junction = (!id)? arr[1] : junctionArray(junction, arr[1]);
-        ++id;
-    }
-    return junction;
+    return arrays
+        .flatMap(item => [item[1]])
+        .reduce((prevItem, currItem, index) => index === 0 ? currItem : junctionArray(prevItem, currItem),[]);  
 }
 
 
