@@ -1,5 +1,6 @@
 import { templateClone } from "../utils/template.js";
 
+// NOTE: deuxième version de l'agorithme de recherche
 
 // COMMENT:  cible le template html des items de la liste déroulante de tags
 const cardTemplate           = document.getElementById('card-template');
@@ -23,7 +24,7 @@ class RecipeCard{
     }
     // insère le template html de la carte recette
     insertTemplate() {
-        const [ {clone}, {custom} ]                         = templateClone(cardTemplate, '.recipe-card');
+        const [ {clone}, {custom} ]                              = templateClone(cardTemplate, '.recipe-card');
         custom.     querySelector('.card-title').textContent     = this.data.name;
         custom.     querySelector('.worktime-recipe').textContent= this.data.time;
         custom.     querySelector('.card-text').textContent      = this.data.description;
@@ -33,18 +34,14 @@ class RecipeCard{
         this.insertIngredients(this.card.querySelector('ul'));
     }
     // insère la liste des ingrédient à l'aide ru template html dans la carte recette
-    insertIngredients(target, index = 0) {
-        if(index < this.ingredients.length) {
+    insertIngredients(target) {
+        this.ingredients.forEach(item => {
             const [{clone}, {custom}] = templateClone(cardIngredientsTemplate, 'li');
-            let quantity              = this.ingredients[index].quantity;
-            quantity = (this.ingredients[index].unit === undefined)?
-                        quantity : 
-                        quantity+this.ingredients[index].unit; 
-            custom.insertAdjacentText('afterbegin', this.ingredients[index].ingredient);
+            let quantity = (item.unit === undefined)? item.quantity : item.quantity + item.unit;
+            custom.insertAdjacentText('afterbegin', item.ingredient);
             custom.querySelector     ('span').textContent = quantity;
             target.appendChild       (clone);
-            this.  insertIngredients(target, ++index);
-        }
+        });
     }
     // ordre d'affichage ou masquage des cartes recettes
     displayDrive() {

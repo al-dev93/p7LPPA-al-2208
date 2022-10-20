@@ -1,4 +1,4 @@
-// NOTE: première version de l'agorithme de recherche
+// NOTE: deuxième version de l'agorithme de recherche
 
 // COMMENT: fonctions de manipulation de chaînes de caractères 
 
@@ -47,39 +47,9 @@ function pluralWord(word) {
     return word+'s';
 }
 
-// recherche un caractère dans une chaîne, indique s'il est présent et sa position
-function searchFirstChar(str, char) {
-    const firstChar = [];
-    for(const i in str) {
-        if(str[i] === char) {
-            firstChar[firstChar.length] = +i;
-        }
-    }
-    return (firstChar.length > 0)? firstChar: false;
-}
-
-// extrait une sous-chaîne entre une position de début et de fin
-function searchSubstring(str, start, end) {
-    let i = start;
-    let result = "";
-    while (i <= end) {
-        result += str[i];
-        ++i;
-    }
-    return result;
-}
-
 // indique si une chaîne est présente dans une autre
 function searchString(str1, str2) {
-    const charPos = searchFirstChar(str1, str2[0]);
-    let charResult;     
-    for(const i in charPos) {
-        const str = searchSubstring(str1, charPos[i], charPos[i]+str2.length-1)
-        if(str === str2) {
-            charResult = str;
-        }
-    }
-    return (str2 === charResult)
+    return str1.includes(str2);
 } 
 
 // retourne le singulier du mot 

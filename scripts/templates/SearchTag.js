@@ -5,6 +5,8 @@ import { eventAtAll, templateClone }                                         fro
 import { addInArray, junctionArray, inActiveTags, inArray, removeInArray }   from "../utils/array-handler.js";
 import { searchString, stringNormalize }                                     from "../utils/string-convert.js";
 
+// NOTE: deuxième version de l'agorithme de recherche
+
 // COMMENT:  cible le template html des items de la liste déroulante de tags
 const tagListTemplate = document.getElementById('tag-list-template');
 
@@ -33,13 +35,12 @@ class SearchTag {
     }
 
     // créé la liste déroulante de tags
-    createSearchTag(index = 0) {
-        if(index < this.data.length) {
-            this.insertTemplate (index, this.data[index].value); // insère le template html
+    createSearchTag() {
+        this.data.forEach((item, index) => {
+            this.insertTemplate (index, item.value);
             this.tagListElem = this.target.querySelectorAll('span');
             this.addTagListEvent(this.tagListElem[index], index);
-            this.createSearchTag(++index);
-        }
+        });
         this.tagListWidth = this.target.offsetWidth;
         this.addWidgetEvent();
     }
@@ -94,10 +95,10 @@ class SearchTag {
         const enableTag = junctionArray(this.data[index].idRecipes, this.searchDrive.idRecipesOnBoard);
         if(enableTag.length) {
             tag. classList.remove('d-none');
-            this.idTagListOn = addInArray   (this.idTagListOn, index);
+            addInArray(this.idTagListOn, index);
         } else {
             tag. classList.add('d-none');
-            this.idTagListOn = removeInArray(this.idTagListOn, index);
+            removeInArray(this.idTagListOn, index);
         }
     }
 
@@ -110,13 +111,13 @@ class SearchTag {
         const searchTag = searchString(this.data[index].normalize, stringNormalize(this.tagInput.value));
         if((this.tagInput.value === "" && !this.searchDrive.isOnSearch) || (this.tagInput.value === "" && enableTag))  {
             this.tagListElem[index].classList.remove('d-none');
-            this.itemTagListSearchOff = removeInArray(this.itemTagListSearchOff, index);
+            removeInArray(this.itemTagListSearchOff, index);
         } else if((!this.searchDrive.isOnSearch && !searchTag) || (!searchTag && enableTag)) {
             this.tagListElem[index].classList.add('d-none');
-            this.itemTagListSearchOff = addInArray(this.itemTagListSearchOff, index);
+            addInArray(this.itemTagListSearchOff, index);
         } else if((!this.searchDrive.isOnSearch && searchTag) || (searchTag && enableTag)) {
             this.tagListElem[index].classList.remove('d-none');
-            this.itemTagListSearchOff = removeInArray(this.itemTagListSearchOff, index);
+            removeInArray(this.itemTagListSearchOff, index);
         }
     }
     // vide la recherche en cours lorsqu'elle n'a pas été suivie d'un click sur un tag
