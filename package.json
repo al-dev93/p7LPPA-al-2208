@@ -4,7 +4,9 @@
   "description": "projet 7 - les petits plats formation DAJSR",
   "main": "index.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "build": "sass --style=compressed scss/main.scss css/main.css",
+    "dev": "sass --watch scss/main.scss css/main.css"
   },
   "repository": {
     "type": "git",
@@ -17,7 +19,8 @@
   },
   "homepage": "https://github.com/al-dev93/p7LPPA-al-2208#readme",
   "devDependencies": {
-    "eslint": "^8.23.0"
+    "eslint": "^8.23.0",
+    "sass": "^1.89.0"
   },
   "dependencies": {
     "bootstrap": "^5.2.0",
